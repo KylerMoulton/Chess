@@ -24,14 +24,24 @@ public abstract class pieceImple implements ChessPiece{
         Set<ChessMove> possibleMoves = new HashSet<>();
         boolean moreMoves = true;
         while (moreMoves) {
-            if (position.getRow()<=7 && position.getColumn()<=7) {
-                if (board.getPiece(position).getTeamColor()!=getTeamColor()) {
-                    ChessPosition endPosition = new positionImple(position.getRow()+rowDir,position.getColumn()+columnDir);
-                    possibleMoves.add(new moveImple(position,endPosition,null));
-                }
-            }
+            calculateMoves(board, position, rowDir, columnDir, possibleMoves);
             moreMoves = false;
         }
         return possibleMoves;
+    }
+    protected Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition position, int rowDir, int columnDir) {
+        Set<ChessMove> possibleMoves = new HashSet<>();
+        calculateMoves(board, position, rowDir, columnDir, possibleMoves);
+
+        return possibleMoves;
+    }
+
+    private void calculateMoves(ChessBoard board, ChessPosition position, int rowDir, int columnDir, Set<ChessMove> possibleMoves) {
+        if (position.getRow()<=7 && position.getColumn()<=7) {
+            if (board.getPiece(position).getTeamColor()!=getTeamColor()) {
+                ChessPosition endPosition = new positionImple(position.getRow()+rowDir,position.getColumn()+columnDir);
+                possibleMoves.add(new moveImple(position,endPosition,null));
+            }
+        }
     }
 }
