@@ -1,5 +1,7 @@
 package chess;
 
+import java.util.Objects;
+
 public class moveImple implements ChessMove{
     private ChessPosition startPosition;
     private ChessPosition endPosition;
@@ -22,5 +24,18 @@ public class moveImple implements ChessMove{
     @Override
     public ChessPiece.PieceType getPromotionPiece() {
         return promotionPiece;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        moveImple moveImple = (moveImple) o;
+        return Objects.equals(startPosition, moveImple.startPosition) && Objects.equals(endPosition, moveImple.endPosition) && promotionPiece == moveImple.promotionPiece;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(startPosition, endPosition, promotionPiece);
     }
 }
