@@ -12,14 +12,14 @@ public class knightImple extends pieceImple{
     @Override
     public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
         Set<ChessMove> possibleMoves = new HashSet<>();
-        possibleMoves.addAll(knightMoves(board,myPosition,2,1));
-        possibleMoves.addAll(knightMoves(board,myPosition,1,2));
-        possibleMoves.addAll(knightMoves(board,myPosition,-1,2));
-        possibleMoves.addAll(knightMoves(board,myPosition,-2,1));
-        possibleMoves.addAll(knightMoves(board,myPosition,-2,-1));
-        possibleMoves.addAll(knightMoves(board,myPosition,-1,-2));
-        possibleMoves.addAll(knightMoves(board,myPosition,1,-2));
-        possibleMoves.addAll(knightMoves(board,myPosition,2,-1));
+        possibleMoves.addAll(otherMoves(board,myPosition,2,1));
+        possibleMoves.addAll(otherMoves(board,myPosition,1,2));
+        possibleMoves.addAll(otherMoves(board,myPosition,-1,2));
+        possibleMoves.addAll(otherMoves(board,myPosition,-2,1));
+        possibleMoves.addAll(otherMoves(board,myPosition,-2,-1));
+        possibleMoves.addAll(otherMoves(board,myPosition,-1,-2));
+        possibleMoves.addAll(otherMoves(board,myPosition,1,-2));
+        possibleMoves.addAll(otherMoves(board,myPosition,2,-1));
         return possibleMoves;
     }
 }
