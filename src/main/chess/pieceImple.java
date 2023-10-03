@@ -29,7 +29,7 @@ public abstract class pieceImple implements ChessPiece{
         }
         return possibleMoves;
     }
-    protected Collection<ChessMove> knightMoves(ChessBoard board, ChessPosition position, int rowDir, int columnDir) {
+    protected Collection<ChessMove> otherMoves(ChessBoard board, ChessPosition position, int rowDir, int columnDir) {
         Set<ChessMove> possibleMoves = new HashSet<>();
         calculateMoves(board, position, rowDir, columnDir, possibleMoves);
 

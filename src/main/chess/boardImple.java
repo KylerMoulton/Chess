@@ -21,7 +21,7 @@ public class boardImple implements ChessBoard{
         boardArray[1][0] = new knightImple(ChessGame.TeamColor.WHITE);
         boardArray[2][0] = new bishopImple(ChessGame.TeamColor.WHITE);
         boardArray[3][0] = new queenImple(ChessGame.TeamColor.WHITE);
-        boardArray[4][0] = new pieceImple(ChessGame.TeamColor.WHITE, ChessPiece.PieceType.KING);
+        boardArray[4][0] = new kingImple(ChessGame.TeamColor.WHITE);
         boardArray[5][0] = new bishopImple(ChessGame.TeamColor.WHITE);
         boardArray[6][0] = new knightImple(ChessGame.TeamColor.WHITE);
         boardArray[7][0] = new rookImple(ChessGame.TeamColor.WHITE);
@@ -37,7 +37,7 @@ public class boardImple implements ChessBoard{
         boardArray[1][7] = new knightImple(ChessGame.TeamColor.BLACK);
         boardArray[2][7] = new bishopImple(ChessGame.TeamColor.BLACK);
         boardArray[3][7] = new queenImple(ChessGame.TeamColor.BLACK);
-        boardArray[4][7] = new pieceImple(ChessGame.TeamColor.BLACK, ChessPiece.PieceType.KING);
+        boardArray[4][7] = new kingImple(ChessGame.TeamColor.BLACK);
         boardArray[5][7] = new bishopImple(ChessGame.TeamColor.BLACK);
         boardArray[6][7] = new knightImple(ChessGame.TeamColor.BLACK);
         boardArray[7][7] = new rookImple(ChessGame.TeamColor.BLACK);
