@@ -11,28 +11,26 @@ public class TestFactory {
     //Chess Functions
     //------------------------------------------------------------------------------------------------------------------
     public static ChessBoard getNewBoard(){
-        // FIXME
-		return null;
+        return new boardImple();
     }
 
     public static ChessGame getNewGame(){
-        // FIXME
-		return null;
+		return new gameImple();
     }
 
     public static ChessPiece getNewPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type){
-        // FIXME
-		return null;
+        return new pieceImple(pieceColor,type);
+        //pieceColor = java.awt.Color.white;
+        //type = ChessPiece.PieceType.BISHOP;
+        //java.awt.Color.white, ChessPiece.PieceType.BISHOP
     }
 
     public static ChessPosition getNewPosition(Integer row, Integer col){
-        // FIXME
-		return null;
+		return new positionImple(row,col);
     }
 
     public static ChessMove getNewMove(ChessPosition startPosition, ChessPosition endPosition, ChessPiece.PieceType promotionPiece){
-        // FIXME
-		return null;
+		return new moveImple(startPosition,endPosition,promotionPiece);
     }
     //------------------------------------------------------------------------------------------------------------------
 
