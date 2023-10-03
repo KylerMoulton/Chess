@@ -1,16 +1,15 @@
 package chess;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-public class pieceImple implements ChessPiece{
+public abstract class pieceImple implements ChessPiece{
     private ChessGame.TeamColor color;
     private PieceType pieceType;
-    private Collection<ChessMove> possibleMoves;
     public pieceImple(ChessGame.TeamColor teamColor,PieceType typeOPiece) {
         this.color = teamColor;
         this.pieceType = typeOPiece;
-    }
-    public pieceImple(){
     }
     @Override
     public ChessGame.TeamColor getTeamColor() {
@@ -21,9 +20,18 @@ public class pieceImple implements ChessPiece{
     public PieceType getPieceType() {
         return pieceType;
     }
-
-    @Override
-    public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-        return null;
+    protected Collection<ChessMove> lineMoves(ChessBoard board, ChessPosition position, int rowDir, int columnDir) {
+        Set<ChessMove> possibleMoves = new HashSet<>();
+        boolean moreMoves = true;
+        while (moreMoves) {
+            if (position.getRow()<=7 && position.getColumn()<=7) {
+                if (board.getPiece(position).getTeamColor()!=getTeamColor()) {
+                    ChessPosition endPosition = new positionImple(position.getRow()+rowDir,position.getColumn()+columnDir);
+                    possibleMoves.add(new moveImple(position,endPosition,null));
+                }
+            }
+            moreMoves = false;
+        }
+        return possibleMoves;
     }
 }
