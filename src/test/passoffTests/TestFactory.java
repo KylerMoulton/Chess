@@ -2,6 +2,8 @@ package passoffTests;
 
 import chess.*;
 
+import java.util.Collection;
+
 /**
  * Used for testing your code
  * Add in code using your classes for each method for each FIXME
@@ -19,7 +21,12 @@ public class TestFactory {
     }
 
     public static ChessPiece getNewPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type){
-        return new pieceImple(pieceColor,type);
+        return new pieceImple(pieceColor, type) {
+            @Override
+            public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
+                return null;
+            }
+        };
         //pieceColor = java.awt.Color.white;
         //type = ChessPiece.PieceType.BISHOP;
         //java.awt.Color.white, ChessPiece.PieceType.BISHOP
