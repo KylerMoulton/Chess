@@ -85,37 +85,33 @@ public abstract class pieceImple implements ChessPiece{
         if (columnDir == -2) curColumn -= 2;
         ChessPosition endPosition = new positionImple(curRow,curColumn);
         if ((endPosition.getRow()>=0&&endPosition.getRow()<=7)&&(endPosition.getColumn()>=0&&endPosition.getColumn()<=7)) {
-            if (board.getPiece(endPosition).getTeamColor() != getTeamColor()) {
-                if (board.getPiece(endPosition).getTeamColor()== ChessGame.TeamColor.WHITE){
-                    if (columnDir==2) {
-                        if (position.getColumn() == 1) {
-                            addWhitePawnMoves(position, possibleMoves, endPosition);
-                        }
+            if (board.getPiece(endPosition)==null) {
+                if (getTeamColor()== ChessGame.TeamColor.WHITE) {
+                    if (rowDir==2&&position.getRow()==1) {
+                        addWhitePawnMoves(position,possibleMoves,endPosition);
                     }
-                    if (columnDir==1&&rowDir==0){
-                        addWhitePawnMoves(position, possibleMoves, endPosition);
-                    }
-                    if (columnDir==1&&rowDir==1) {
-                        addWhitePawnMoves(position, possibleMoves, endPosition);
-                    }
-                    if (columnDir==1&&rowDir==-1) {
-                        addWhitePawnMoves(position, possibleMoves, endPosition);
+                    else if(rowDir == 1 && columnDir == 0) {
+                        addWhitePawnMoves(position,possibleMoves,endPosition);
                     }
                 }
-                else if (board.getPiece(endPosition).getTeamColor()== ChessGame.TeamColor.BLACK){
-                    if (columnDir==-2) {
-                        if (position.getColumn() == 1) {
-                            addBlackPawnMoves(position, possibleMoves, endPosition);
-                        }
+                if (getTeamColor()== ChessGame.TeamColor.BLACK) {
+                    if (rowDir==-2&&position.getRow()==6) {
+                        addBlackPawnMoves(position,possibleMoves,endPosition);
                     }
-                    if (columnDir==-1&&rowDir==0){
-                        addBlackPawnMoves(position, possibleMoves, endPosition);
+                    else if(rowDir==-1 && columnDir == 0) {
+                        addBlackPawnMoves(position,possibleMoves,endPosition);
                     }
-                    if (columnDir==-1&&rowDir==1) {
-                        addBlackPawnMoves(position, possibleMoves, endPosition);
+                }
+            }
+            else if (board.getPiece(endPosition).getTeamColor() != getTeamColor()) {
+                if (getTeamColor()== ChessGame.TeamColor.WHITE) {
+                    if(rowDir == 1 && columnDir != 0) {
+                        addWhitePawnMoves(position,possibleMoves,endPosition);
                     }
-                    if (columnDir==-1&&rowDir==-1) {
-                        addBlackPawnMoves(position, possibleMoves, endPosition);
+                }
+                if (getTeamColor()== ChessGame.TeamColor.BLACK) {
+                    if(rowDir==-1 && columnDir != 0) {
+                        addBlackPawnMoves(position,possibleMoves,endPosition);
                     }
                 }
             }
