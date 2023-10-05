@@ -21,15 +21,25 @@ public class TestFactory {
     }
 
     public static ChessPiece getNewPiece(ChessGame.TeamColor pieceColor, ChessPiece.PieceType type){
-        return new pieceImple(pieceColor, type) {
-            @Override
-            public Collection<ChessMove> pieceMoves(ChessBoard board, ChessPosition myPosition) {
-                return null;
-            }
-        };
-        //pieceColor = java.awt.Color.white;
-        //type = ChessPiece.PieceType.BISHOP;
-        //java.awt.Color.white, ChessPiece.PieceType.BISHOP
+        if (ChessPiece.PieceType.BISHOP==type) {
+            return new bishopImple(pieceColor);
+        }
+        if (ChessPiece.PieceType.KNIGHT==type) {
+            return new knightImple(pieceColor);
+        }
+        if (ChessPiece.PieceType.ROOK==type) {
+            return new rookImple(pieceColor);
+        }
+        if (ChessPiece.PieceType.KING==type) {
+            return new kingImple(pieceColor);
+        }
+        if (ChessPiece.PieceType.QUEEN==type) {
+            return new queenImple(pieceColor);
+        }
+        if (ChessPiece.PieceType.PAWN==type) {
+            return new pawnImple(pieceColor);
+        }
+        return null;
     }
 
     public static ChessPosition getNewPosition(Integer row, Integer col){

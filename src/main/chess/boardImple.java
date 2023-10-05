@@ -11,7 +11,7 @@ public class boardImple implements ChessBoard{
 
     @Override
     public ChessPiece getPiece(ChessPosition position) {
-        return boardArray[position.getColumn()][position.getRow()];
+        return boardArray[position.getRow()][position.getColumn()];
     }
 
     @Override
