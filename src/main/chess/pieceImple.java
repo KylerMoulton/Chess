@@ -97,7 +97,7 @@ public abstract class pieceImple implements ChessPiece{
     }
 
     private void addWhitePawnMoves(ChessPosition position, Set<ChessMove> possibleMoves, ChessPosition endPosition) {
-        if (endPosition.getColumn() == 7) {
+        if (endPosition.getRow() == 7) {
             possibleMoves.add(new moveImple(position, endPosition, PieceType.ROOK));
             possibleMoves.add(new moveImple(position, endPosition, PieceType.KNIGHT));
             possibleMoves.add(new moveImple(position, endPosition, PieceType.BISHOP));
@@ -108,7 +108,7 @@ public abstract class pieceImple implements ChessPiece{
     }
 
     private void addBlackPawnMoves(ChessPosition position, Set<ChessMove> possibleMoves, ChessPosition endPosition) {
-        if (endPosition.getColumn() == 0) {
+        if (endPosition.getRow() == 0) {
             possibleMoves.add(new moveImple(position, endPosition, PieceType.ROOK));
             possibleMoves.add(new moveImple(position, endPosition, PieceType.KNIGHT));
             possibleMoves.add(new moveImple(position, endPosition, PieceType.BISHOP));
@@ -121,25 +121,22 @@ public abstract class pieceImple implements ChessPiece{
     private void calculateMoves(ChessBoard board, ChessPosition position, int rowDir, int columnDir, Set<ChessMove> possibleMoves) {
         int curRow = position.getRow();
         int curColumn = position.getColumn();
-        while (moreMoves) {
-            if (rowDir == 1) curRow += 1;
-            if (rowDir == -1) curRow -= 1;
-            if (columnDir == 1) curColumn += 1;
-            if (columnDir == -1) curColumn -= 1;
+        if (rowDir == 1) curRow += 1;
+        if (rowDir == -1) curRow -= 1;
+        if (columnDir == 1) curColumn += 1;
+        if (columnDir == -1) curColumn -= 1;
 
-            ChessPosition endPosition = new positionImple(curRow,curColumn);
-            if ((endPosition.getRow()>=0&&endPosition.getRow()<=7)&&(endPosition.getColumn()>=0&&endPosition.getColumn()<=7)) {
-                if (board.getPiece(endPosition)==null) {
-                    possibleMoves.add(new moveImple(position,endPosition,null));
-                }
-                else if (board.getPiece(endPosition).getTeamColor() != getTeamColor()) {
-                    possibleMoves.add(new moveImple(position,endPosition,null));
-                    moreMoves=false;
-                }else if (board.getPiece(endPosition).getTeamColor()==getTeamColor()) {moreMoves=false;}
+        ChessPosition endPosition = new positionImple(curRow,curColumn);
+        if ((endPosition.getRow()>=0&&endPosition.getRow()<=7)&&(endPosition.getColumn()>=0&&endPosition.getColumn()<=7)) {
+            if (board.getPiece(endPosition)==null) {
+                possibleMoves.add(new moveImple(position,endPosition,null));
+            }
+            else if (board.getPiece(endPosition).getTeamColor() != getTeamColor()) {
+                possibleMoves.add(new moveImple(position,endPosition,null));
+                moreMoves=false;
+            }else if (board.getPiece(endPosition).getTeamColor()==getTeamColor()) {moreMoves=false;}
 
-            }else moreMoves=false;
-
-        }
+        }else moreMoves=false;
     }
 
     @Override
