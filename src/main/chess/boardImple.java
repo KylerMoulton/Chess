@@ -6,7 +6,7 @@ public class boardImple implements ChessBoard{
     ChessPiece[][] boardArray = new ChessPiece[8][8];
     @Override
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        boardArray[position.getColumn()][position.getRow()] = piece;
+        boardArray[position.getRow()][position.getColumn()] = piece;
     }
 
     @Override

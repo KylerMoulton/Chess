@@ -20,6 +20,38 @@ public class queenImple extends pieceImple{
         possibleMoves.addAll(lineMoves(board,myPosition,1,-1));
         possibleMoves.addAll(lineMoves(board,myPosition,-1,1));
         possibleMoves.addAll(lineMoves(board,myPosition,-1,-1));
+//        possibleMoves.addAll(queenMoves(board,myPosition,1,0));
+//        possibleMoves.addAll(queenMoves(board,myPosition,-1,0));
+//        possibleMoves.addAll(queenMoves(board,myPosition,0,1));
+//        possibleMoves.addAll(queenMoves(board,myPosition,0,-1));
+//        possibleMoves.addAll(queenMoves(board,myPosition,1,1));
+//        possibleMoves.addAll(queenMoves(board,myPosition,1,-1));
+//        possibleMoves.addAll(queenMoves(board,myPosition,-1,1));
+//        possibleMoves.addAll(queenMoves(board,myPosition,-1,-1));
         return possibleMoves;
+    }
+    private Collection<ChessMove> queenMoves(ChessBoard board, ChessPosition myPosition, int rowDir, int colDir) {
+        Set<ChessMove> foundMoves = new HashSet<>();
+        moreMoves = true;
+        int curRow = myPosition.getRow() + 1;
+        int curColumn = myPosition.getColumn() + 1;
+        while (moreMoves) {
+            if (rowDir == 1) curRow += 1;
+            if (rowDir == -1) curRow -= 1;
+            if (colDir == 1) curColumn += 1;
+            if (colDir == -1) curColumn -= 1;
+
+            ChessPosition endPosition = new positionImple(curRow,curColumn);
+            if ((endPosition.getRow()>=0&&endPosition.getRow()<=7)&&(endPosition.getColumn()>=0&&endPosition.getColumn()<=7)) {
+                if (board.getPiece(myPosition)==null) {
+                    foundMoves.add(new moveImple(myPosition,endPosition,null));
+                }
+                else if (board.getPiece(endPosition).getTeamColor()!=getTeamColor()) {
+                    foundMoves.add(new moveImple(myPosition,endPosition,null));
+                }else if (board.getPiece(endPosition).getTeamColor()!=getTeamColor()) {moreMoves=false;}
+
+            }else moreMoves=false;
+        }
+        return foundMoves;
     }
 }
