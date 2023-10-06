@@ -88,7 +88,9 @@ public abstract class pieceImple implements ChessPiece{
             if (board.getPiece(endPosition)==null) {
                 if (getTeamColor()== ChessGame.TeamColor.WHITE) {
                     if (rowDir==2&&position.getRow()==1) {
-                        addWhitePawnMoves(position,possibleMoves,endPosition);
+                        if (board.getPiece(new positionImple(curRow-1,curColumn))==null) {
+                            addWhitePawnMoves(position, possibleMoves, endPosition);
+                        }
                     }
                     else if(rowDir == 1 && columnDir == 0) {
                         addWhitePawnMoves(position,possibleMoves,endPosition);
@@ -96,7 +98,9 @@ public abstract class pieceImple implements ChessPiece{
                 }
                 if (getTeamColor()== ChessGame.TeamColor.BLACK) {
                     if (rowDir==-2&&position.getRow()==6) {
-                        addBlackPawnMoves(position,possibleMoves,endPosition);
+                        if (board.getPiece(new positionImple(curRow+1,curColumn))==null) {
+                            addWhitePawnMoves(position, possibleMoves, endPosition);
+                        }
                     }
                     else if(rowDir==-1 && columnDir == 0) {
                         addBlackPawnMoves(position,possibleMoves,endPosition);
