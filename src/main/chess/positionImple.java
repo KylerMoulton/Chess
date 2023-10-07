@@ -31,4 +31,12 @@ public class positionImple implements ChessPosition{
     public int hashCode() {
         return Objects.hash(row, column);
     }
+
+//    @Override
+//    public String toString() {
+//        return "positionImple{" +
+//                "row=" + row +
+//                ", column=" + column +
+//                '}';
+//    }
 }
