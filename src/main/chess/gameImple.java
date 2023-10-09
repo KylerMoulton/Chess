@@ -20,20 +20,11 @@ public class gameImple implements ChessGame{
     @Override
     public Collection<ChessMove> validMoves(ChessPosition startPosition) {
         Set<ChessMove> movesValid = new HashSet<>();
-        ChessBoard tempBoard = new boardImple();
-        for (int i=0;i<8;i++) {
-            for (int j = 0; j < 8; j++) {
-                ChessPosition curPos = new positionImple(i, j);
-                ChessPiece currentPiece = gameBoard.getPiece(curPos);
-                if (currentPiece!=null) {
-                    tempBoard.addPiece(curPos,currentPiece);
-                }
-            }
-        }
+
 //        ChessBoard tempBoard = gameBoard;
         ChessPiece curPiece = getBoard().getPiece(startPosition);
         if (curPiece != null) {
-            for (ChessMove move : curPiece.pieceMoves(tempBoard, startPosition)) {
+            for (ChessMove move : curPiece.pieceMoves(gameBoard, startPosition)) {
 //                System.out.println(move);
                 ChessPiece tempPiece = null;
                 if (gameBoard.getPiece(move.getEndPosition())!=null) {
@@ -62,6 +53,10 @@ public class gameImple implements ChessGame{
              if (getTeamTurn()==gameBoard.getPiece(move.getStartPosition()).getTeamColor()) {
                 gameBoard.addPiece(move.getEndPosition(), gameBoard.getPiece(move.getStartPosition()));
                 gameBoard.addPiece(move.getStartPosition(), null);
+                if (move.getPromotionPiece()!=null) {
+                    ChessPiece newPiece = piecePromotion(move.getPromotionPiece());
+                    gameBoard.addPiece(move.getEndPosition(),newPiece);
+                }
                 setTeamTurn(this.teamTurn == TeamColor.WHITE ? TeamColor.BLACK:TeamColor.WHITE);
             }else throw new InvalidMoveException("Invalid Move");
         }else throw new InvalidMoveException("Invalid Move");
@@ -69,7 +64,15 @@ public class gameImple implements ChessGame{
 //        gameBoard.addPiece(move.getEndPosition(), gameBoard.getPiece(move.getStartPosition()));
 //        gameBoard.addPiece(move.getStartPosition(), null);
     }
-
+    public ChessPiece piecePromotion(ChessPiece.PieceType pieceType) {
+        return switch(pieceType){
+            case KING, PAWN -> null;
+            case QUEEN -> new queenImple(teamTurn);
+            case BISHOP -> new bishopImple(teamTurn);
+            case KNIGHT -> new knightImple(teamTurn);
+            case ROOK -> new rookImple(teamTurn);
+        };
+    }
     @Override
     public boolean isInCheck(TeamColor teamColor){
         for (int i=0;i<8;i++) {
