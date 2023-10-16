@@ -4,7 +4,6 @@ import model.AuthTokenModel;
 
 public class AuthDAO {
     void createToken(AuthTokenModel token) {
-
     }
     AuthTokenModel getToken() {
         return null;
