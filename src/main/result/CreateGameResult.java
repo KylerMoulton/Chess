@@ -1,7 +1,7 @@
 package result;
 
 /**
- * Class that creates a Create Game Result that CreateGameResult returns
+ * Class that creates a Create Game Result that CreateGameService returns
  */
 
 public class CreateGameResult {
