@@ -1,9 +1,11 @@
 package result;
 
-import model.GameModel;
 
-import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * Class that creates a List Games Result that JoinGameService returns
+ */
 
 public class ListGamesResult {
     private Map<String,String> gamesList;
@@ -13,6 +15,17 @@ public class ListGamesResult {
     private String gameName;
     private String authToken;
     private String message;
+
+    /**
+     * Constructor for ListGamesResult
+     * @param gamesList Map of all games in the Database
+     * @param gameID Game ID of the game
+     * @param whiteUsername White players username (Can be null)
+     * @param blackUsername Black players username (Can be null)
+     * @param gameName Name of the game
+     * @param authToken Takes in an authToken to check if the User is authorized
+     * @param message Message returned if HTTP request fails or is successful
+     */
 
     public ListGamesResult(Map<String, String> gamesList, int gameID, String whiteUsername, String blackUsername, String gameName, String authToken, String message) {
         this.gamesList = gamesList;
