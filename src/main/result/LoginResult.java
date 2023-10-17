@@ -1,10 +1,19 @@
 package result;
 
+/**
+ * Class that creates a Login Result that LoginService returns
+ */
 public class LoginResult {
     private String message;
     private String authToken;
     private String username;
 
+    /**
+     * Constructor for LoginResult
+     * @param authToken Takes in an authToken to check if the User is authorized
+     * @param message Message returned if HTTP request fails or is successful
+     * @param username Takes in the username of the User who logged in
+     */
     public LoginResult(String message, String authToken, String username) {
         this.message = message;
         this.authToken = authToken;
