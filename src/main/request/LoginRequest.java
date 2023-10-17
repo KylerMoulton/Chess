@@ -1,7 +1,7 @@
 package request;
 
 /**
- * Class that creates a Login request that CreateGameService calls
+ * Class that creates a Login request that LoginGameService calls
  */
 public class LoginRequest {
     private String username;
