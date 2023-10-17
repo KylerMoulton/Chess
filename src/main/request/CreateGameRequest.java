@@ -1,8 +1,17 @@
 package request;
 
+/**
+ * Class that creates a game request that CreateGameService calls
+ */
 public class CreateGameRequest {
     private String gameName;
     private String authToken;
+
+    /**
+     * Constructor for CreateGameRequest
+     * @param gameName Takes in a String of the GameName
+     * @param authToken Takes in an authToken to verify if the User is authorized
+     */
 
     public CreateGameRequest(String gameName, String authToken) {
         this.gameName = gameName;
