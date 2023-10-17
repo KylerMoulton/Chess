@@ -1,8 +1,15 @@
 package result;
 
+/**
+ * Class that creates a Clear Result that ClearService returns
+ */
 public class ClearResult {
     private String message;
 
+    /**
+     * Constructor for Clear Result
+     * @param message Message returned if HTTP request fails
+     */
     public ClearResult(String message) {
         this.message = message;
     }
