@@ -1,8 +1,17 @@
 package model;
 
+/**
+ * Creates an AuthToken
+ */
 public class AuthTokenModel {
     private String authToken;
     private String username;
+
+    /**
+     * Constructor for the AuthTokenModel
+     * @param authToken Takes in what to set the authToken as
+     * @param username Takes in the username of the user associated with the authToken
+     */
 
     public AuthTokenModel(String authToken, String username) {
         this.authToken = authToken;
