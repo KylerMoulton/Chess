@@ -1,10 +1,19 @@
 package model;
 
+/**
+ * Creates a User
+ */
 public class UserModel {
     private String username;
     private String password;
     private String email;
 
+    /**
+     * Constructor for the UserModel
+     * @param username Username of the user
+     * @param password Password of the user
+     * @param email Email of the user
+     */
     public UserModel(String username, String password, String email) {
         this.username = username;
         this.password = password;
