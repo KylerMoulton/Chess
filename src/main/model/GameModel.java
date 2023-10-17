@@ -1,12 +1,25 @@
 package model;
 
-import chess.ChessGame;;
+import chess.ChessGame;
+
+/**
+ * Creates a Game
+ */
 public class GameModel {
     private int gameID;
     private String whiteUsername;
     private String blackUsername;
     private String gameName;
     private ChessGame game;
+
+    /**
+     * Constructor for the GameModel
+     * @param gameID Game ID of the game
+     * @param whiteUsername Username of the White user
+     * @param blackUsername Username of the Black user
+     * @param gameName Name of the game
+     * @param game New game imple
+     */
 
     public GameModel(int gameID, String whiteUsername, String blackUsername, String gameName, ChessGame game) {
         this.gameID = gameID;
