@@ -1,12 +1,21 @@
 package result;
 
+/**
+ * Class that creates a Login Result that LoginService returns
+ */
+
 public class LogoutResult {
     private String message;
-    private String authtoken;
+    private String authToken;
 
-    public LogoutResult(String message, String authtoken) {
+    /**
+     * Constructor for LogoutResult
+     * @param authToken Takes in an authToken to check if the User is authorized
+     * @param message Message returned if HTTP request fails or is successful
+     */
+    public LogoutResult(String message, String authToken) {
         this.message = message;
-        this.authtoken = authtoken;
+        this.authToken = authToken;
     }
 
     public String getMessage() {
@@ -17,11 +26,11 @@ public class LogoutResult {
         this.message = message;
     }
 
-    public String getAuthtoken() {
-        return authtoken;
+    public String getAuthToken() {
+        return authToken;
     }
 
-    public void setAuthtoken(String authtoken) {
-        this.authtoken = authtoken;
+    public void setAuthToken(String authToken) {
+        this.authToken = authToken;
     }
 }
