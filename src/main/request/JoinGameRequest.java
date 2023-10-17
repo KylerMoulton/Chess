@@ -1,7 +1,7 @@
 package request;
 
 /**
- * Class that creates a Join Game request that CreateGameService calls
+ * Class that creates a Join Game request that JoinGameService calls
  */
 
 public class JoinGameRequest {
