@@ -3,6 +3,9 @@ package dataAccess;
 import chess.ChessGame;
 import model.GameModel;
 
+/**
+ * Class that creates, updates, and deletes GameModels in the Database
+ */
 public class GameDAO {
     /**
      * Inserts a game into the Database
