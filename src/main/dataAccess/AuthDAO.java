@@ -3,7 +3,7 @@ package dataAccess;
 import model.AuthTokenModel;
 
 /**
- *
+ * Class that creates, updates, and deletes AuthTokenModels in the Database
  */
 public class AuthDAO {
     /**
