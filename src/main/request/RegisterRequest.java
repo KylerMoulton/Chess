@@ -1,9 +1,19 @@
 package request;
 
+/**
+ * Class that creates a Register request that RegisterService calls
+ */
 public class RegisterRequest {
     private String username;
     private String password;
     private String email;
+
+    /**
+     * Constructor for RegisterRequest
+     * @param username Username that the user is requesting to use
+     * @param password Password that the user is requesting to use
+     * @param email Email that the user is requesting to use
+     */
 
     public RegisterRequest(String username, String password, String email) {
         this.username = username;
