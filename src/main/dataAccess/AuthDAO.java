@@ -10,7 +10,7 @@ public class AuthDAO {
      * Creates an AuthToken that states if the user is authorized
      * @param token takes in an AuthTokenModel
      */
-    void createToken(AuthTokenModel token) {
+    void createToken(AuthTokenModel token) throws DataAccessException{
     }
 
     /**
@@ -18,7 +18,7 @@ public class AuthDAO {
      * @param token takes in a String of the requested token
      * @return Returns the AuthTokenModel of the request token
      */
-    AuthTokenModel getToken(String token) {
+    AuthTokenModel getToken(String token) throws DataAccessException{
         return null;
     }
 
@@ -26,7 +26,7 @@ public class AuthDAO {
      * Updates the requested token
      * @param token takes in a String of the requested token
      */
-    void updateToken(String token) {
+    void updateToken(String token) throws DataAccessException{
 
     }
 
@@ -34,7 +34,7 @@ public class AuthDAO {
      * Updates the players username
      * @param username Takes in a String of the new username
      */
-    void updateUsername(String username) {
+    void updateUsername(String username) throws DataAccessException{
 
     }
 
@@ -42,7 +42,7 @@ public class AuthDAO {
      * Deletes the requested AuthToken
      * @param token takes in a String of the requested token
      */
-    void deleteToken(AuthTokenModel token) {
+    void deleteToken(AuthTokenModel token) throws DataAccessException{
 
     }
 }
