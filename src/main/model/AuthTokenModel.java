@@ -1,10 +1,12 @@
 package model;
 
+import java.util.UUID;
+
 /**
  * Creates an AuthToken
  */
 public class AuthTokenModel {
-    private String authToken;
+    private UUID authToken;
     private String username;
 
     /**
@@ -13,17 +15,17 @@ public class AuthTokenModel {
      * @param username Takes in the username of the user associated with the authToken
      */
 
-    public AuthTokenModel(String authToken, String username) {
+    public AuthTokenModel(UUID authToken, String username) {
         this.authToken = authToken;
         this.username = username;
     }
 
-    public String getAuthToken() {
+    public UUID getAuthToken() {
         return authToken;
     }
 
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
+    public void setAuthToken() {
+        this.authToken = UUID.randomUUID();
     }
 
     public String getUsername() {
