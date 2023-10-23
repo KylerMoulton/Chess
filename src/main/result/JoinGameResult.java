@@ -5,7 +5,13 @@ package result;
  */
 
 public class JoinGameResult {
+    /**
+     * Auth token of authorized user
+     */
     private String authToken;
+    /**
+     * Message to return after HTTP request
+     */
     private String message;
 
     /**

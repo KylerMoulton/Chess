@@ -5,7 +5,13 @@ package result;
  */
 
 public class LogoutResult {
+    /**
+     * Message returned after HTTP request
+     */
     private String message;
+    /**
+     * Takes in an authToken to check if the User is authorized
+     */
     private String authToken;
 
     /**

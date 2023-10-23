@@ -5,8 +5,17 @@ package result;
  */
 
 public class CreateGameResult {
+    /**
+     * Auth token of authorized user
+     */
     private String authToken;
+    /**
+     * GameID of the created game
+     */
     private int gameID;
+    /**
+     * Message to return after HTTP request
+     */
     private String message;
 
     /**

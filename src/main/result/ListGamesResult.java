@@ -1,24 +1,45 @@
 package result;
 
 
-import java.util.Map;
+import java.util.Set;
 
 /**
  * Class that creates a List Games Result that JoinGameService returns
  */
 
 public class ListGamesResult {
-    private Map<String,String> gamesList;
+    /**
+     * Set of all games in the Database
+     */
+    private Set<Games> gamesList;
+    /**
+     * Game ID of the game
+     */
     private int gameID;
+    /**
+     * White players username (Can be null)
+     */
     private String whiteUsername;
+    /**
+     * Black players username (Can be null)
+     */
     private String blackUsername;
+    /**
+     * Name of the game
+     */
     private String gameName;
+    /**
+     * Takes in an authToken to check if the User is authorized
+     */
     private String authToken;
+    /**
+     * Message returned after HTTP request
+     */
     private String message;
 
     /**
      * Constructor for ListGamesResult
-     * @param gamesList Map of all games in the Database
+     * @param gamesList Set of all games in the Database
      * @param gameID Game ID of the game
      * @param whiteUsername White players username (Can be null)
      * @param blackUsername Black players username (Can be null)
@@ -27,7 +48,7 @@ public class ListGamesResult {
      * @param message Message returned if HTTP request fails or is successful
      */
 
-    public ListGamesResult(Map<String, String> gamesList, int gameID, String whiteUsername, String blackUsername, String gameName, String authToken, String message) {
+    public ListGamesResult(Set<Games> gamesList, int gameID, String whiteUsername, String blackUsername, String gameName, String authToken, String message) {
         this.gamesList = gamesList;
         this.gameID = gameID;
         this.whiteUsername = whiteUsername;
@@ -37,15 +58,54 @@ public class ListGamesResult {
         this.message = message;
     }
 
-    public Map<String, String> getGamesList() {
+    /**
+     * Class that creates a gameObject to store in gameList
+     */
+    private class Games {
+        /**
+         * Game ID of the game
+         */
+        private int gameID;
+        /**
+         * White players username (Can be null)
+         */
+        private String whiteUsername;
+        /**
+         * Black players username (Can be null)
+         */
+        private String blackUsername;
+        /**
+         * Name of the game
+         */
+        private String gameName;
+
+        /**
+         * Constructor for Games
+         * @param gameID Takes in the gameID of the game
+         * @param whiteUsername Takes in the White players username
+         * @param blackUsername Takes in the Black players username
+         * @param gameName Takes in the name of the Game
+         */
+        public Games(int gameID, String whiteUsername, String blackUsername, String gameName) {
+            StringBuilder game = new StringBuilder();
+            game.append("gameID:").append(gameID).append(", whiteUsername:").append(whiteUsername).append(", blackUsername:").append(blackUsername).append("gameName:").append(gameName);
+        }
+
+    }
+    public Set<Games> getGamesList() {
         return gamesList;
     }
 
-    public void setGamesList(Map<String, String> gamesList) {
+    public void setGamesList(Set<Games> gamesList) {
         this.gamesList = gamesList;
     }
-    public void addToSetGamesList(Map<String,String> gamesList,String key,String value) {
-        gamesList.put(key,value);
+
+    /**
+     * Adds to gamesList
+     * @param gameObject Takes in a gameObject that contains game information
+     */
+    public void addToSetGamesList(Games gameObject) {
+        gamesList.add(gameObject);
     }
 
     public int getGameID() {

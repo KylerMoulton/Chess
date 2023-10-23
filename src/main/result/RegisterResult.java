@@ -4,8 +4,17 @@ package result;
  * Class that creates a Register Result that LoginService returns
  */
 public class RegisterResult {
+    /**
+     * Message returned after HTTP request
+     */
     private String message;
+    /**
+     * Takes in an authToken to check if the User is authorized
+     */
     private String authToken;
+    /**
+     * Takes in the username of the user
+     */
     private String username;
 
     /**
