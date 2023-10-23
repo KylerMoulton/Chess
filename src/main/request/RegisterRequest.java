@@ -4,8 +4,17 @@ package request;
  * Class that creates a Register request that RegisterService calls
  */
 public class RegisterRequest {
+    /**
+     * Username of the user attempting to register
+     */
     private String username;
+    /**
+     * Password of the user attempting to register
+     */
     private String password;
+    /**
+     * Email of the user attempting to register
+     */
     private String email;
 
     /**

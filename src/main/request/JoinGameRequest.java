@@ -5,8 +5,17 @@ package request;
  */
 
 public class JoinGameRequest {
+    /**
+     * Takes in an authToken to see if the user is authorized
+     */
     private String authToken;
+    /**
+     * Takes in what color the player wants to be
+     */
     private String playerColor;
+    /**
+     * Takes in the gameID of the game the player wants to join
+     */
     private int gameID;
 
     /**

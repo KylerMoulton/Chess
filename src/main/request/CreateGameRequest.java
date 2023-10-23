@@ -4,7 +4,13 @@ package request;
  * Class that creates a game request that CreateGameService calls
  */
 public class CreateGameRequest {
+    /**
+     * Name of the game to create
+     */
     private String gameName;
+    /**
+     * Takes in an authToken to see if the user is authorized
+     */
     private String authToken;
 
     /**

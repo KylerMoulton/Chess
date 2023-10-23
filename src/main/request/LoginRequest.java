@@ -4,7 +4,13 @@ package request;
  * Class that creates a Login request that LoginGameService calls
  */
 public class LoginRequest {
+    /**
+     * Username of the user attempting to log in
+     */
     private String username;
+    /**
+     * Password of the user attempting to log in
+     */
     private String password;
 
     /**
