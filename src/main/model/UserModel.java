@@ -4,8 +4,17 @@ package model;
  * Creates a User
  */
 public class UserModel {
+    /**
+     * Username of the user
+     */
     private String username;
+    /**
+     * Users password
+     */
     private String password;
+    /**
+     * Users email
+     */
     private String email;
 
     /**

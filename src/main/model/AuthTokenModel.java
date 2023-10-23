@@ -6,7 +6,13 @@ import java.util.UUID;
  * Creates an AuthToken
  */
 public class AuthTokenModel {
+    /**
+     * Variable for the Universally Unique Identifier that acts as authToken
+     */
     private UUID authToken;
+    /**
+     * Variable for the users username
+     */
     private String username;
 
     /**
@@ -24,8 +30,8 @@ public class AuthTokenModel {
         return authToken;
     }
 
-    public void setAuthToken() {
-        this.authToken = UUID.randomUUID();
+    public void setAuthToken(UUID authToken) {
+        this.authToken = authToken;
     }
 
     public String getUsername() {

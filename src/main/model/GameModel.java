@@ -6,10 +6,25 @@ import chess.ChessGame;
  * Creates a Game
  */
 public class GameModel {
+    /**
+     * Game ID of the game
+     */
     private int gameID;
+    /**
+     * Username of White user
+     */
     private String whiteUsername;
+    /**
+     * Username of Black user
+     */
     private String blackUsername;
+    /**
+     * Name of the game
+     */
     private String gameName;
+    /**
+     * New game implementation
+     */
     private ChessGame game;
 
     /**
