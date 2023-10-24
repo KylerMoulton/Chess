@@ -2,26 +2,33 @@ package dataAccess;
 
 import model.AuthTokenModel;
 
+import java.util.HashMap;
+import java.util.UUID;
+
 /**
  * Class that creates, updates, and deletes AuthTokenModels in the Database
  */
 public class AuthDAO {
+    public static HashMap<String,AuthTokenModel> createdAuthTokens = new HashMap<>();
     /**
      * Creates an AuthToken that states if the user is authorized
-     * @param token takes in an AuthTokenModel
+     * @param username takes in an AuthTokenModel
      * @throws DataAccessException Throws a DataAccessException
      */
-    void createToken(AuthTokenModel token) throws DataAccessException{
+    public String createToken(String username) throws DataAccessException{
+        AuthTokenModel newAuthToken = new AuthTokenModel(UUID.randomUUID().toString(),username);
+        storeToken(newAuthToken);
+        return newAuthToken.getAuthToken();
     }
 
     /**
      * Gets an AuthToken
-     * @param token takes in a String of the requested token
-     * @return Returns the AuthTokenModel of the request token
+     * @param username takes in a String of username associated with the requested token
+     * @return Returns the AuthToken of the requested token
      * @throws DataAccessException Throws a DataAccessException
      */
-    AuthTokenModel getToken(String token) throws DataAccessException{
-        return null;
+    public String getToken(String username) throws DataAccessException{
+        return createdAuthTokens.get(username).getAuthToken();
     }
 
     /**
@@ -29,7 +36,7 @@ public class AuthDAO {
      * @param token takes in a String of the requested token
      * @throws DataAccessException Throws a DataAccessException
      */
-    void updateToken(String token) throws DataAccessException{
+    public void updateToken(String token) throws DataAccessException{
 
     }
 
@@ -38,8 +45,7 @@ public class AuthDAO {
      * @param username Takes in a String of the new username
      * @throws DataAccessException Throws a DataAccessException
      */
-    void updateUsername(String username) throws DataAccessException{
-
+    public void updateUsername(String username) throws DataAccessException{
     }
 
     /**
@@ -47,7 +53,13 @@ public class AuthDAO {
      * @param token takes in a String of the requested token
      * @throws DataAccessException Throws a DataAccessException
      */
-    void deleteToken(AuthTokenModel token) throws DataAccessException{
-
+    public void deleteToken(String token) throws DataAccessException{
+        createdAuthTokens.remove(token);
+    }
+    public void clearTokens() throws DataAccessException {
+        createdAuthTokens.clear();
+    }
+    public void storeToken(AuthTokenModel tokenModel) throws DataAccessException{
+        createdAuthTokens.put(tokenModel.getAuthToken(),tokenModel);
     }
 }

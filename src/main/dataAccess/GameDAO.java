@@ -3,10 +3,13 @@ package dataAccess;
 import chess.ChessGame;
 import model.GameModel;
 
+import java.util.HashMap;
+
 /**
  * Class that creates, updates, and deletes GameModels in the Database
  */
 public class GameDAO {
+    public static HashMap<Integer,GameModel> createdGames = new HashMap<>();
     /**
      * Inserts a game into the Database
      * @param game Takes in a game to add
@@ -65,7 +68,10 @@ public class GameDAO {
      * Clears all games from the Database
      * @throws DataAccessException Throws a Data Access Exception
      */
-    void clearGames()  throws DataAccessException{
-
+    public void clearGames()  throws DataAccessException{
+        createdGames.clear();
+    }
+    public void storeToken(GameModel gameModel) throws DataAccessException{
+        createdGames.put(gameModel.getGameID(),gameModel);
     }
 }
