@@ -6,13 +6,18 @@ import service.ClearService;
 import spark.Response;
 
 public class ClearHandler {
-    private Gson gson;
-    public Object handleRequest(Response res) throws Exception {
+    private final Gson gson = new Gson();
+    public Object handleRequest(Response res)  {
         ClearService service = new ClearService();
-        ClearResult result = service.clear();
+        ClearResult result = new ClearResult(null);
+        try {
+            result = service.clear();
+            res.status(200);
+        } catch (Exception e) {
+            res.status(500);
+            result.setMessage(e.getMessage());
+        }
         //set status
-        res.status(200);
-        res.status(500);
         return gson.toJson(result);
     }
 }

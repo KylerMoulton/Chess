@@ -1,5 +1,8 @@
 package service;
 
+import dataAccess.AuthDAO;
+import dataAccess.GameDAO;
+import dataAccess.UserDAO;
 import result.ClearResult;
 
 /**
@@ -12,6 +15,12 @@ public class ClearService {
      * @throws Exception Throws an exception
      */
     public ClearResult clear() throws Exception{
-        return null;
+        GameDAO games = new GameDAO();
+        UserDAO users = new UserDAO();
+        AuthDAO tokens = new AuthDAO();
+        games.clearGames();
+        users.clearUsers();
+        tokens.clearTokens();
+        return new ClearResult("Success!");
     }
 }
