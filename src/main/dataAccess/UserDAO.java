@@ -50,6 +50,12 @@ public class UserDAO {
     public void UpdateUserPassword(UserModel user,String password) throws DataAccessException{
 
     }
+    public String GetPassword(String username) throws DataAccessException {
+        if (createdUsers.get(username)!=null) {
+            return createdUsers.get(username).getPassword();
+        }
+        return null;
+    }
     /**
      * Updates the user's email
      * @param user Takes in the UserModel of the wanted user
