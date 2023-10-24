@@ -1,6 +1,7 @@
 package handlers;
 
 import com.google.gson.Gson;
+import exeptions.UnauthorizedException;
 import request.LoginRequest;
 import result.LoginResult;
 import service.LoginService;
@@ -8,15 +9,23 @@ import spark.Request;
 import spark.Response;
 
 public class LoginHandler {
-    private Gson gson;
-    public Object handleRequest(Request req, Response res) throws Exception {
+    private final Gson gson = new Gson();
+    public Object handleRequest(Request req, Response res) {
         LoginRequest request = gson.fromJson(req.body(), LoginRequest.class);
         LoginService service = new LoginService();
-        LoginResult result = service.login(request);
+        LoginResult result = new LoginResult(null,null,null);
         //set status
-        res.status(200);
-        res.status(401);
-        res.status(500);
+        try {
+            result = service.login(request);
+            res.status(200);
+        } catch (UnauthorizedException e) {
+            res.status(401);
+            result.setMessage(e.getMessage());
+        } catch (Exception e) {
+            res.status(500);
+            result.setMessage(e.getMessage());
+
+        }
         return gson.toJson(result);
     }
 }
