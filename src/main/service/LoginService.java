@@ -7,6 +7,8 @@ import exeptions.UnauthorizedException;
 import request.LoginRequest;
 import result.LoginResult;
 
+import java.util.Objects;
+
 /**
  * Logs in an existing user (returns a new authToken).
  */
@@ -21,6 +23,7 @@ public class LoginService {
         UserDAO users = new UserDAO();
         AuthDAO tokens = new AuthDAO();
         existingUser(r.getUsername(),users);
+        rightPassword(r.getPassword(),r.getUsername(),users);
         String curUser = users.GetUser(r.getUsername());
         String authToken = tokens.createToken(r.getUsername());
         return new LoginResult(null, authToken, curUser);
@@ -29,6 +32,10 @@ public class LoginService {
         if (users.GetUser(username)==null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
-
+    }
+    private void rightPassword(String password, String username, UserDAO users) throws UnauthorizedException, DataAccessException {
+        if (!Objects.equals(users.GetPassword(username), password)) {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
     }
 }
