@@ -10,12 +10,13 @@ import java.util.HashMap;
  */
 public class GameDAO {
     public static HashMap<Integer,GameModel> createdGames = new HashMap<>();
+    public static int gameID = 0;
     /**
      * Inserts a game into the Database
      * @param game Takes in a game to add
      * @throws DataAccessException Throws a DataAccessException
      */
-    void insertGame(GameModel game) throws DataAccessException{
+    public void insertGame(GameModel game) throws DataAccessException{
 
     }
 
@@ -24,14 +25,14 @@ public class GameDAO {
      * @param game Takes in a game to get from the Database
      * @throws DataAccessException DataAccessException Throws a DataAccessException
      */
-    void getGame(GameModel game) throws DataAccessException{
+    public void getGame(GameModel game) throws DataAccessException{
 
     }
     /**
      * Gets all games from the Database
      * @throws DataAccessException Throws a DataAccessException
      */
-    void getAllGames() throws DataAccessException{
+    public void getAllGames() throws DataAccessException{
 
     }
 
@@ -42,7 +43,7 @@ public class GameDAO {
      * @param teamColor Takes in a String of what team the player would like to join
      * @throws DataAccessException Throws a DataAccessException
      */
-    void claimSpot(GameModel game, String username, ChessGame.TeamColor teamColor)  throws DataAccessException{
+    public void claimSpot(GameModel game, String username, ChessGame.TeamColor teamColor)  throws DataAccessException{
 
     }
 
@@ -51,7 +52,7 @@ public class GameDAO {
      * @param game Takes in a game to get from the Database
      * @throws DataAccessException Throws a DataAccessException
      */
-    void updateGame(GameModel game)  throws DataAccessException{
+    public void updateGame(GameModel game)  throws DataAccessException{
 
     }
 
@@ -60,7 +61,7 @@ public class GameDAO {
      * @param game Takes in a game to delete from the Database
      * @throws DataAccessException Throws a DataAccessException
      */
-    void removeGame(GameModel game)  throws DataAccessException{
+    public void removeGame(GameModel game)  throws DataAccessException{
 
     }
 
@@ -73,5 +74,11 @@ public class GameDAO {
     }
     public void storeToken(GameModel gameModel) throws DataAccessException{
         createdGames.put(gameModel.getGameID(),gameModel);
+    }
+    public void IncreaseGameID(){
+        gameID++;
+    }
+    public Integer getGameID() {
+        return gameID;
     }
 }
