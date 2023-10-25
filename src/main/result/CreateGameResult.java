@@ -24,7 +24,7 @@ public class CreateGameResult {
      * @param gameID Takes in the gameID of the created game
      * @param message Message returned if HTTP request fails or is successful
      */
-    public CreateGameResult(String authToken, int gameID, String message) {
+    public CreateGameResult(String authToken, Integer gameID, String message) {
         this.authToken = authToken;
         this.gameID = gameID;
         this.message = message;
