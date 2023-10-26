@@ -15,11 +15,8 @@ public class ListGamesResult {
     /**
      * Set of all games in the Database
      */
-    private Set<Set<String>> games;
-    /**
-     * Game ID of the game
-     */
-//    private int gameID;
+    private Collection<GameModel> games;
+    //    private int gameID;
     /**
      * White players username (Can be null)
      */
@@ -48,13 +45,12 @@ public class ListGamesResult {
      */
 
     public ListGamesResult(Collection<GameModel> gameModels, String message) {
-        Set<Set<String>> gameObjects = new HashSet<>();
-        for (GameModel game : gameModels) {
-            Games newGame = new Games(game.getGameID(), game.getWhiteUsername(), game.getBlackUsername(), game.getGameName());
-            Set<String> newGameSet = newGame.gameInfo();
-            gameObjects.add(newGameSet);
-        }
-        this.games = gameObjects;
+//        Set<Games> gameObjects = new HashSet<>();
+//        for (GameModel game : gameModels) {
+//            Set<Games> newGameSet = (Set<Games>) new Games(game.getGameID(), game.getWhiteUsername(), game.getBlackUsername(), game.getGameName());
+//            gameObjects.add((Games) newGameSet);
+//        }
+        this.games = gameModels;
         this.message = message;
     }
 
@@ -90,11 +86,11 @@ public class ListGamesResult {
                     return gameInfoSet;
                 }
         }
-    public Set<Set<String>> getGamesList() {
+    public Collection<GameModel> getGamesList() {
         return games;
     }
 
-    public void setGamesList(Set<Set<String>> gamesList) {
+    public void setGamesList(Collection<GameModel> gamesList) {
         this.games = gamesList;
     }
 

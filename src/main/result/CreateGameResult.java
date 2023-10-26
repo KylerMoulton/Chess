@@ -12,7 +12,7 @@ public class CreateGameResult {
     /**
      * GameID of the created game
      */
-    private int gameID;
+    private Integer gameID;
     /**
      * Message to return after HTTP request
      */
@@ -40,7 +40,7 @@ public class CreateGameResult {
         return gameID;
     }
 
-    public void setGameID(int gameID) {
+    public void setGameID(Integer gameID) {
         this.gameID = gameID;
     }
 

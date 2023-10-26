@@ -27,9 +27,10 @@ public class CreateGameService {
         GameDAO games = new GameDAO();
         checkAuthorization(token,tokens);
         validGameName(g.getGameName());
+        GameModel newgame = new GameModel(games.getGameID(),null,null, g.getGameName(), new gameImple());
+        games.insertGame(newgame);
         games.IncreaseGameID();
-        games.insertGame(new GameModel(games.getGameID(),null,null, g.getGameName(), new gameImple()));
-        return new CreateGameResult(games.getGameID(), null);
+        return new CreateGameResult(newgame.getGameID(), null);
     }
     private void validGameName(String gameName) throws BadReqException {
         if (gameName == null ) {

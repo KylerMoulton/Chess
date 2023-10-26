@@ -11,7 +11,7 @@ import java.util.HashMap;
  */
 public class GameDAO {
     public static HashMap<Integer,GameModel> createdGames = new HashMap<>();
-    public static int gameID = 0;
+    public static int gameID = 1;
     /**
      * Inserts a game into the Database
      * @param game Takes in a game to add
