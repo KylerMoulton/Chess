@@ -25,6 +25,9 @@ public class LogoutService {
         return new LogoutResult(null,token);
     }
     public void checkAuthorization(String token,AuthDAO tokens) throws DataAccessException, UnauthorizedException {
+        if (tokens.getCreatedAuthTokens().isEmpty()) {
+            throw new UnauthorizedException("Error: unauthorized");
+        }
         if (token!=null){
             if (!Objects.equals(tokens.getToken(token), token)) {
                 throw new UnauthorizedException("Error: unauthorized");
