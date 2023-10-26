@@ -27,7 +27,7 @@ public class RegisterService {
         return new RegisterResult(null, authToken,r.getUsername());
     }
     private void validCredentials(String username, String password, String email) throws BadReqException {
-        if (username == null && password == null && email ==null) {
+        if (username == null || password == null || email ==null) {
             throw new BadReqException("Error: bad request");
         }
     }
