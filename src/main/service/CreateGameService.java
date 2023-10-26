@@ -4,7 +4,6 @@ import chess.gameImple;
 import dataAccess.AuthDAO;
 import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
-import dataAccess.UserDAO;
 import exeptions.BadReqException;
 import exeptions.UnauthorizedException;
 import model.GameModel;
@@ -24,14 +23,13 @@ public class CreateGameService {
      * @throws Exception Throws an exception
      */
     public CreateGameResult createGame(CreateGameRequest g,String token) throws Exception{
-        UserDAO users = new UserDAO();
         AuthDAO tokens = new AuthDAO();
         GameDAO games = new GameDAO();
         checkAuthorization(token,tokens);
         validGameName(g.getGameName());
         games.IncreaseGameID();
         games.insertGame(new GameModel(games.getGameID(),null,null, g.getGameName(), new gameImple()));
-        return new CreateGameResult(token, games.getGameID(), null);
+        return new CreateGameResult(games.getGameID(), null);
     }
     private void validGameName(String gameName) throws BadReqException {
         if (gameName == null ) {

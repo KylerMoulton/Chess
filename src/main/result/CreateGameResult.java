@@ -20,12 +20,10 @@ public class CreateGameResult {
 
     /**
      * Constructor for CreateGameResult
-     * @param authToken Takes in an authToken to check if the User is authorized
      * @param gameID Takes in the gameID of the created game
      * @param message Message returned if HTTP request fails or is successful
      */
-    public CreateGameResult(String authToken, Integer gameID, String message) {
-        this.authToken = authToken;
+    public CreateGameResult(Integer gameID, String message) {
         this.gameID = gameID;
         this.message = message;
     }

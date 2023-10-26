@@ -14,7 +14,7 @@ public class CreateGameHandler {
     public Object handleRequest(Request req, Response res)  {
         CreateGameRequest request = gson.fromJson(req.body(), CreateGameRequest.class);
         CreateGameService service = new CreateGameService();
-        CreateGameResult result = new CreateGameResult(null,0,null);
+        CreateGameResult result = new CreateGameResult(0,null);
         //set status
         try {
             String token = req.headers("Authorization");
