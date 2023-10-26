@@ -10,6 +10,9 @@ import java.util.UUID;
  */
 public class AuthDAO {
     public static HashMap<String,AuthTokenModel> createdAuthTokens = new HashMap<>();
+    public HashMap<String,AuthTokenModel> getCreatedAuthTokens() {
+        return createdAuthTokens;
+    }
     /**
      * Creates an AuthToken that states if the user is authorized
      * @param username takes in an AuthTokenModel
@@ -23,12 +26,12 @@ public class AuthDAO {
 
     /**
      * Gets an AuthToken
-     * @param username takes in a String of username associated with the requested token
+     * @param authToken takes in a String of username associated with the requested token
      * @return Returns the AuthToken of the requested token
      * @throws DataAccessException Throws a DataAccessException
      */
-    public String getToken(String username) throws DataAccessException{
-        return createdAuthTokens.get(username).getAuthToken();
+    public String getToken(String authToken) throws DataAccessException{
+        return createdAuthTokens.get(authToken).getAuthToken();
     }
 
     /**

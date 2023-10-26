@@ -3,6 +3,7 @@ package dataAccess;
 import chess.ChessGame;
 import model.GameModel;
 
+import java.util.Collection;
 import java.util.HashMap;
 
 /**
@@ -17,7 +18,7 @@ public class GameDAO {
      * @throws DataAccessException Throws a DataAccessException
      */
     public void insertGame(GameModel game) throws DataAccessException{
-
+        createdGames.put(game.getGameID(),game);
     }
 
     /**
@@ -32,8 +33,8 @@ public class GameDAO {
      * Gets all games from the Database
      * @throws DataAccessException Throws a DataAccessException
      */
-    public void getAllGames() throws DataAccessException{
-
+    public Collection<GameModel> getAllGames() throws DataAccessException{
+        return createdGames.values();
     }
 
     /**
@@ -78,6 +79,7 @@ public class GameDAO {
     public void IncreaseGameID(){
         gameID++;
     }
+
     public Integer getGameID() {
         return gameID;
     }
