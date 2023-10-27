@@ -86,30 +86,6 @@ public class GameModel implements Comparable{
         this.game = game;
     }
 
-//    @Override
-//    public boolean equals(Object o) {
-//        if (this == o) return true;
-//        if (o == null || getClass() != o.getClass()) return false;
-//        GameModel gameModel = (GameModel) o;
-//        if (whiteUsername!=null && gameModel.whiteUsername !=null) {
-//            if (!whiteUsername.equals(gameModel.whiteUsername)) {
-//                return false;
-//            }
-//        }
-//        else if (whiteUsername!=null || gameModel.whiteUsername !=null) {
-//            return false;
-//        }
-//        if (blackUsername!=null && gameModel.blackUsername !=null) {
-//            if (!blackUsername.equals(gameModel.blackUsername)) {
-//                return false;
-//            }
-//        }
-//        else if (blackUsername!=null || gameModel.blackUsername !=null) {
-//            return false;
-//        }
-//        return gameID == gameModel.gameID && gameName.equals(gameModel.getGameName()) && game.equals(gameModel.getGame());
-//    }
-
 
     @Override
     public boolean equals(Object o) {
