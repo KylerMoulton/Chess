@@ -2,7 +2,6 @@ package service;
 
 import chess.gameImple;
 import dataAccess.AuthDAO;
-import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import exeptions.BadReqException;
 import exeptions.UnauthorizedException;
@@ -35,7 +34,7 @@ public class CreateGameService {
             throw new BadReqException("Error: bad request");
         }
     }
-    public void checkAuthorization(String token,AuthDAO tokens) throws DataAccessException, UnauthorizedException {
+    public void checkAuthorization(String token,AuthDAO tokens) throws UnauthorizedException {
         if (tokens.getCreatedAuthTokens().isEmpty()) {
             throw new UnauthorizedException("Error: unauthorized");
         }

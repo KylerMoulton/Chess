@@ -1,7 +1,6 @@
 package service;
 
 import dataAccess.AuthDAO;
-import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import exeptions.UnauthorizedException;
 import result.ListGamesResult;
@@ -23,7 +22,7 @@ public class ListGamesService {
         listGames.setGamesList(games.getAllGames());
         return listGames;
     }
-    public void checkAuthorization(String token, AuthDAO tokens) throws DataAccessException, UnauthorizedException {
+    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException {
         if (tokens.getCreatedAuthTokens().isEmpty()) {
             throw new UnauthorizedException("Error: unauthorized");
         }

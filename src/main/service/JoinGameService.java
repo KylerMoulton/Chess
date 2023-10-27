@@ -1,7 +1,6 @@
 package service;
 
 import dataAccess.AuthDAO;
-import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import exeptions.AlreadyTakenException;
 import exeptions.BadReqException;
@@ -75,7 +74,7 @@ public class JoinGameService {
         return null;
     }
 
-    public void checkAuthorization(String token, AuthDAO tokens) throws DataAccessException, UnauthorizedException {
+    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException {
         if (tokens.getCreatedAuthTokens().isEmpty()) {
             throw new UnauthorizedException("Error: unauthorized");
         }

@@ -1,7 +1,6 @@
 package service;
 
 import dataAccess.AuthDAO;
-import dataAccess.DataAccessException;
 import dataAccess.UserDAO;
 import exeptions.AlreadyTakenException;
 import exeptions.BadReqException;
@@ -31,7 +30,7 @@ public class RegisterService {
             throw new BadReqException("Error: bad request");
         }
     }
-    private void alreadyTaken(String username,UserDAO users) throws AlreadyTakenException, DataAccessException {
+    private void alreadyTaken(String username,UserDAO users) throws AlreadyTakenException {
         if (users.GetUser(username)!=null) {
             throw new AlreadyTakenException("Error: already taken");
         }
