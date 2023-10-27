@@ -11,7 +11,7 @@ import spark.Request;
 import spark.Response;
 
 public class JoinGameHandler {
-    private Gson gson = new Gson();
+    private final Gson gson = new Gson();
     public Object handleRequest(Request req, Response res)  {
         JoinGameRequest request = gson.fromJson(req.body(), JoinGameRequest.class);
         JoinGameService service = new JoinGameService();
