@@ -31,9 +31,13 @@ public class JoinGameService {
         GameDAO games = new GameDAO();
         checkAuthorization(token,tokens);
         GameModel curGame = validGameReq(j.getGameID(),games);
-        assert curGame != null;
+        if (curGame == null) {
+           throw new BadReqException("Error: bad request");
+        }
         AuthTokenModel curUser = getCurUser(token,tokens);
-        assert curUser != null;
+        if (curUser == null) {
+            throw new BadReqException("Error: bad request");
+        }
         setPlayerColor(j.getPlayerColor(),curGame,curUser);
         return new JoinGameResult(token,null);
     }
