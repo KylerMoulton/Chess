@@ -21,6 +21,6 @@ public class ClearService {
         games.clearGames();
         users.clearUsers();
         tokens.clearTokens();
-        return new ClearResult("Success!");
+        return new ClearResult(null);
     }
 }
