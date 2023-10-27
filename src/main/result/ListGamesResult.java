@@ -54,6 +54,10 @@ public class ListGamesResult {
         this.message = message;
     }
 
+    public ListGamesResult() {
+
+    }
+
     /**
      * Class that creates a gameObject to store in gameList
      */

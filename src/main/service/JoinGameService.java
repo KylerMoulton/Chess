@@ -42,7 +42,7 @@ public class JoinGameService {
         return new JoinGameResult(token,null);
     }
 
-    private AuthTokenModel getCurUser(String token, AuthDAO authTokens) throws DataAccessException {
+    private AuthTokenModel getCurUser(String token, AuthDAO authTokens) {
         for (AuthTokenModel tokens : authTokens.getCreatedAuthTokens().values()) {
             if (Objects.equals(tokens.getAuthToken(), token)) {
                 return tokens;
@@ -64,12 +64,14 @@ public class JoinGameService {
         }
     }
 
-    private GameModel validGameReq(int gameID, GameDAO games) throws DataAccessException, BadReqException {
+    private GameModel validGameReq(Integer gameID, GameDAO games) throws BadReqException {
+    if (gameID != null) {
         for (GameModel game : games.getAllGames()) {
             if (game.getGameID() == gameID) {
                 return game;
-            } else throw new BadReqException("Error: bad request");
+            }
         }
+    } else {throw new BadReqException("Error: bad request");}
         return null;
     }
 

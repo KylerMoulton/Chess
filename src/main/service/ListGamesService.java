@@ -19,7 +19,9 @@ public class ListGamesService {
         AuthDAO tokens = new AuthDAO();
         GameDAO games = new GameDAO();
         checkAuthorization(token,tokens);
-        return new ListGamesResult(games.getAllGames(),null);
+        ListGamesResult listGames = new ListGamesResult();
+        listGames.setGamesList(games.getAllGames());
+        return listGames;
     }
     public void checkAuthorization(String token, AuthDAO tokens) throws DataAccessException, UnauthorizedException {
         if (tokens.getCreatedAuthTokens().isEmpty()) {

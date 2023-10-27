@@ -1,10 +1,10 @@
 package dataAccess;
 
-import chess.ChessGame;
 import model.GameModel;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * Class that creates, updates, and deletes GameModels in the Database
@@ -15,25 +15,15 @@ public class GameDAO {
     /**
      * Inserts a game into the Database
      * @param game Takes in a game to add
-     * @throws DataAccessException Throws a DataAccessException
      */
-    public void insertGame(GameModel game) throws DataAccessException{
+    public void insertGame(GameModel game) {
         createdGames.put(game.getGameID(),game);
     }
 
     /**
-     * Gets a game from the Database
-     * @param game Takes in a game to get from the Database
-     * @throws DataAccessException DataAccessException Throws a DataAccessException
-     */
-    public void getGame(GameModel game) throws DataAccessException{
-
-    }
-    /**
      * Gets all games from the Database
-     * @throws DataAccessException Throws a DataAccessException
      */
-    public Collection<GameModel> getAllGames() throws DataAccessException{
+    public Collection<GameModel> getAllGames() {
         return createdGames.values();
     }
 
@@ -44,8 +34,15 @@ public class GameDAO {
      * @param teamColor Takes in a String of what team the player would like to join
      * @throws DataAccessException Throws a DataAccessException
      */
-    public void claimSpot(GameModel game, String username, ChessGame.TeamColor teamColor)  throws DataAccessException{
+    public void claimSpot(GameModel game, String username, String teamColor)  throws DataAccessException{
+        GameModel g = createdGames.get(game.getGameID());
 
+        if (Objects.equals(teamColor, "WHITE")) {
+            g.setWhiteUsername(username);
+        }
+        if (Objects.equals(teamColor, "BLACK")) {
+            g.setBlackUsername(username);
+        }
     }
 
     /**
