@@ -10,8 +10,6 @@ import model.GameModel;
 import request.CreateGameRequest;
 import result.CreateGameResult;
 
-import java.util.Objects;
-
 /**
  * Creates a new game
  */
@@ -42,7 +40,7 @@ public class CreateGameService {
             throw new UnauthorizedException("Error: unauthorized");
         }
         if (token!=null){
-            if (!Objects.equals(tokens.getToken(token), token)) {
+            if (tokens.getToken(token)==null) {
                 throw new UnauthorizedException("Error: unauthorized");
             }
         }

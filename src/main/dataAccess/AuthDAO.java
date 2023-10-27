@@ -30,8 +30,8 @@ public class AuthDAO {
      * @return Returns the AuthToken of the requested token
      * @throws DataAccessException Throws a DataAccessException
      */
-    public String getToken(String authToken) throws DataAccessException{
-        return createdAuthTokens.get(authToken).getAuthToken();
+    public AuthTokenModel getToken(String authToken) throws DataAccessException{
+        return createdAuthTokens.get(authToken);
     }
 
     /**

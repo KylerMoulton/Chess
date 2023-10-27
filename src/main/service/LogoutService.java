@@ -6,8 +6,6 @@ import dataAccess.UserDAO;
 import exeptions.UnauthorizedException;
 import result.LogoutResult;
 
-import java.util.Objects;
-
 /**
  * Logs out the user represented by the authToken.
  */
@@ -29,7 +27,7 @@ public class LogoutService {
             throw new UnauthorizedException("Error: unauthorized");
         }
         if (token!=null){
-            if (!Objects.equals(tokens.getToken(token), token)) {
+            if (tokens.getToken(token)==null) {
                 throw new UnauthorizedException("Error: unauthorized");
             }
         }

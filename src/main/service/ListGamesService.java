@@ -6,8 +6,6 @@ import dataAccess.GameDAO;
 import exeptions.UnauthorizedException;
 import result.ListGamesResult;
 
-import java.util.Objects;
-
 /**
  * Gives a list of all games.
  */
@@ -28,7 +26,7 @@ public class ListGamesService {
             throw new UnauthorizedException("Error: unauthorized");
         }
         if (token!=null){
-            if (!Objects.equals(tokens.getToken(token), token)) {
+            if (tokens.getToken(token)==null) {
                 throw new UnauthorizedException("Error: unauthorized");
             }
         }
