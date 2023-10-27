@@ -7,7 +7,7 @@ import java.util.Objects;
 /**
  * Creates a Game
  */
-public class GameModel {
+public class GameModel implements Comparable{
     /**
      * Game ID of the game
      */
@@ -86,17 +86,47 @@ public class GameModel {
         this.game = game;
     }
 
+//    @Override
+//    public boolean equals(Object o) {
+//        if (this == o) return true;
+//        if (o == null || getClass() != o.getClass()) return false;
+//        GameModel gameModel = (GameModel) o;
+//        if (whiteUsername!=null && gameModel.whiteUsername !=null) {
+//            if (!whiteUsername.equals(gameModel.whiteUsername)) {
+//                return false;
+//            }
+//        }
+//        else if (whiteUsername!=null || gameModel.whiteUsername !=null) {
+//            return false;
+//        }
+//        if (blackUsername!=null && gameModel.blackUsername !=null) {
+//            if (!blackUsername.equals(gameModel.blackUsername)) {
+//                return false;
+//            }
+//        }
+//        else if (blackUsername!=null || gameModel.blackUsername !=null) {
+//            return false;
+//        }
+//        return gameID == gameModel.gameID && gameName.equals(gameModel.getGameName()) && game.equals(gameModel.getGame());
+//    }
+
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GameModel gameModel = (GameModel) o;
-        return gameID == gameModel.gameID && Objects.equals(whiteUsername, gameModel.whiteUsername) && Objects.equals(blackUsername, gameModel.blackUsername) && Objects.equals(gameName, gameModel.gameName) && Objects.equals(game, gameModel.game);
+        return gameID == gameModel.gameID && Objects.equals(whiteUsername, gameModel.whiteUsername) && Objects.equals(blackUsername, gameModel.blackUsername) && Objects.equals(gameName, gameModel.gameName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(gameID, whiteUsername, blackUsername, gameName, game);
+        return Objects.hash(gameID, whiteUsername, blackUsername, gameName);
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return o.hashCode()-this.hashCode();
     }
 }
 
