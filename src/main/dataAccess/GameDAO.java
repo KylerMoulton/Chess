@@ -2,7 +2,6 @@ package dataAccess;
 
 import chess.ChessGame;
 import chess.gameImple;
-import model.AuthTokenModel;
 import model.GameModel;
 
 import java.sql.Connection;
@@ -29,6 +28,7 @@ public class GameDAO {
             preparedStatement.setString(4, game.getGameName());
             preparedStatement.setString(5, gameImple.serialization().toJson(game.getGame()));
             preparedStatement.executeUpdate();
+            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
@@ -52,6 +52,7 @@ public class GameDAO {
                     createdGame.setGameName(gameName);
                     createdGame.setGame(gameImple.serialization().fromJson(game, ChessGame.class));
                     createdGames.put(createdGame.getGameID(), createdGame);
+                    database.close();
                 }
             } catch (SQLException e) {
                 String message = e.getMessage();
@@ -67,6 +68,7 @@ public class GameDAO {
     public void clearGames() {
         try (var preparedStatement = database.prepareStatement("DELETE FROM game")) {
             preparedStatement.executeUpdate();
+            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);

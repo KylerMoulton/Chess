@@ -1,7 +1,6 @@
 package dataAccess;
 
 import model.AuthTokenModel;
-import model.UserModel;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -21,6 +20,7 @@ public class AuthDAO {
             preparedStatement.setString(1, returnedToken);
             preparedStatement.setString(2, inputUsername);
             preparedStatement.executeUpdate();
+            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
@@ -37,6 +37,7 @@ public class AuthDAO {
                 var username = user.getString("username");
                 returnedAuth.setAuthToken(authToken);
                 returnedAuth.setUsername(username);
+                database.close();
             } catch (SQLException e) {
                 String message = e.getMessage();
                 System.out.printf(message);
@@ -58,6 +59,7 @@ public class AuthDAO {
                 returnedAuth.setAuthToken(authToken);
                 returnedAuth.setUsername(username);
                 createdAuthTokens.put(returnedAuth.getAuthToken(), returnedAuth);
+                database.close();
             } catch (SQLException e) {
                 String message = e.getMessage();
                 System.out.printf(message);
@@ -74,6 +76,7 @@ public class AuthDAO {
         try (var preparedStatement = database.prepareStatement("DELETE FROM auth WHERE id=?")) {
             preparedStatement.setString(1, token);
             preparedStatement.executeUpdate();
+            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
@@ -83,6 +86,7 @@ public class AuthDAO {
     public void clearTokens() {
         try (var preparedStatement = database.prepareStatement("DELETE FROM auth")) {
             preparedStatement.executeUpdate();
+            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
