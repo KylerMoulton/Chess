@@ -6,13 +6,14 @@ USE chess;
 CREATE TABLE auth (
     id VARCHAR(255) NOT NULL,
     username VARCHAR(255) NOT NULL,
-    PRIMARY KEY (id);
+    PRIMARY KEY (id)
 );
 CREATE TABLE game (
     gameID INT NOT NULL,
     whiteUsername VARCHAR(255),
     blackUsername VARCHAR(255),
     gameName VARCHAR(255) NOT NULL,
+    game VARCHAR(255) NOT NULL,
     PRIMARY KEY (gameID)
 );
 CREATE TABLE user (
