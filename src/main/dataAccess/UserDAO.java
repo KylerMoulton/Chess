@@ -2,48 +2,55 @@ package dataAccess;
 
 import model.UserModel;
 
-import java.util.HashMap;
+import java.sql.Connection;
+import java.sql.SQLException;
 
-/**
- * Class that creates, updates, and deletes UserModels in the Database
- */
 public class UserDAO {
-    public static HashMap<String, UserModel> createdUsers = new HashMap<>();
-    /**
-     * Creates a user in the Database
-     * @param username Takes in a UserModel
-     */
-    public void CreateUser(String username, String password, String email) {
-        UserModel newUser = new UserModel(username,password,email);
-        storeUser(newUser);
+    private final Connection database;
+
+    public UserDAO() throws DataAccessException {
+        this.database = new Database().getConnection();
     }
 
-    /**
-     * Gets a user from the Database
-     * @param username Takes in the User's username as a String
-     * @return Returns the UserModel of the user
-     */
-    public String GetUser(String username) {
-        if (createdUsers.get(username)!=null) {
-            return createdUsers.get(username).getUsername();
+    public void CreateUser(String inputUsername, String inputPassword, String inputEmail) throws SQLException {
+        try (var preparedStatement = database.prepareStatement("Insert INTO user(username,password,email) values (?,?,?)")) {
+            preparedStatement.setString(1, inputUsername);
+            preparedStatement.setString(2, inputPassword);
+            preparedStatement.setString(3, inputEmail);
+
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            String message = e.getMessage();
+            System.out.printf(message);
         }
-        return null;
     }
 
-    public String GetPassword(String username) {
-        if (createdUsers.get(username)!=null) {
-            return createdUsers.get(username).getPassword();
+    public void DeleteUsers() throws SQLException {
+        try (var preparedStatement = database.prepareStatement("DELETE FROM user")) {
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            String message = e.getMessage();
+            System.out.printf(message);
         }
-        return null;
     }
 
-    /**
-     * Deletes all users from the Database
-     */
-    public void clearUsers() {
-        createdUsers.clear();
-    }
-    public void storeUser(UserModel userModel) {
-        createdUsers.put(userModel.getUsername(),userModel);
+    public UserModel GetUser(String inputUsername) throws SQLException {
+        UserModel returnedUser = new UserModel(null, null, null);
+        try (var preparedStatement = database.prepareStatement("SELECT username,password,email FROM user WHERE username=?")) {
+            preparedStatement.setString(1, inputUsername);
+            try (var user = preparedStatement.executeQuery()) {
+                var username = user.getString("username");
+                var password = user.getString("password");
+                returnedUser.setUsername(username);
+                returnedUser.setPassword(password);
+            } catch (SQLException e) {
+                String message = e.getMessage();
+                System.out.printf(message);
+            }
+        } catch (SQLException e) {
+            String message = e.getMessage();
+            System.out.printf(message);
+        }
+        return returnedUser;
     }
 }
