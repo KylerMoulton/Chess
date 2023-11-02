@@ -6,6 +6,7 @@ import exeptions.UnauthorizedException;
 import request.LoginRequest;
 import result.LoginResult;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 /**
@@ -14,26 +15,29 @@ import java.util.Objects;
 public class LoginService {
     /**
      * Method for logging in a user
+     *
      * @param r Takes a LoginRequest
      * @return Returns a LoginResult
      * @throws Exception Throws an exception
      */
-    public LoginResult login (LoginRequest r) throws Exception{
+    public LoginResult login(LoginRequest r) throws Exception {
         UserDAO users = new UserDAO();
         AuthDAO tokens = new AuthDAO();
-        existingUser(r.getUsername(),users);
-        rightPassword(r.getPassword(),r.getUsername(),users);
-        String curUser = users.GetUser(r.getUsername());
+        existingUser(r.getUsername(), users);
+        rightPassword(r.getPassword(), r.getUsername(), users);
+        String curUser = users.GetUser(r.getUsername()).getUsername();
         String authToken = tokens.createToken(r.getUsername());
         return new LoginResult(null, authToken, curUser);
     }
-    private void existingUser(String username, UserDAO users) throws UnauthorizedException {
-        if (users.GetUser(username)==null) {
+
+    private void existingUser(String username, UserDAO users) throws UnauthorizedException, SQLException {
+        if (users.GetUser(username).getUsername() == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
     }
-    private void rightPassword(String password, String username, UserDAO users) throws UnauthorizedException {
-        if (!Objects.equals(users.GetPassword(username), password)) {
+
+    private void rightPassword(String password, String username, UserDAO users) throws UnauthorizedException, SQLException {
+        if (!Objects.equals(users.GetUser(username).getPassword(), password)) {
             throw new UnauthorizedException("Error: unauthorized");
         }
     }
