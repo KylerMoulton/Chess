@@ -42,8 +42,10 @@ public class UserDAO {
             try (var user = preparedStatement.executeQuery()) {
                 var username = user.getString("username");
                 var password = user.getString("password");
+                var email = user.getString("email");
                 returnedUser.setUsername(username);
                 returnedUser.setPassword(password);
+                returnedUser.setEmail(email);
                 database.close();
             } catch (SQLException e) {
                 String message = e.getMessage();
