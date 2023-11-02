@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Creates a User
  */
@@ -19,9 +21,10 @@ public class UserModel {
 
     /**
      * Constructor for the UserModel
+     *
      * @param username Username of the user
      * @param password Password of the user
-     * @param email Email of the user
+     * @param email    Email of the user
      */
     public UserModel(String username, String password, String email) {
         this.username = username;
@@ -51,5 +54,18 @@ public class UserModel {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserModel userModel = (UserModel) o;
+        return Objects.equals(username, userModel.username) && Objects.equals(password, userModel.password) && Objects.equals(email, userModel.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(username, password, email);
     }
 }

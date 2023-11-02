@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 /**
  * Creates an AuthToken
  */
@@ -15,8 +17,9 @@ public class AuthTokenModel {
 
     /**
      * Constructor for the AuthTokenModel
+     *
      * @param authToken Takes in what to set the authToken as
-     * @param username Takes in the username of the user associated with the authToken
+     * @param username  Takes in the username of the user associated with the authToken
      */
 
     public AuthTokenModel(String authToken, String username) {
@@ -38,5 +41,18 @@ public class AuthTokenModel {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AuthTokenModel that = (AuthTokenModel) o;
+        return Objects.equals(authToken, that.authToken) && Objects.equals(username, that.username);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(authToken, username);
     }
 }
