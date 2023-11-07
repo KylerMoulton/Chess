@@ -36,6 +36,15 @@ public class GameDAO {
         }
     }
 
+    public void updateGame(GameModel game) throws SQLException {
+        try (var preparedStatement = database.prepareStatement("UPDATE game SET whiteUsername=?,blackUsername=? WHERE gameID=?")) {
+            preparedStatement.setString(1, game.getWhiteUsername());
+            preparedStatement.setString(2, game.getBlackUsername());
+            preparedStatement.setString(3, Integer.toString(game.getGameID()));
+            preparedStatement.executeUpdate();
+        }
+    }
+
     public Collection<GameModel> getAllGames() {
         HashMap<Integer, GameModel> createdGames = new HashMap<>();
         try (var preparedStatement = database.prepareStatement("SELECT gameID, whiteUsername,blackUsername,gameName,game FROM game")) {

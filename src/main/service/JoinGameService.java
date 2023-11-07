@@ -40,6 +40,7 @@ public class JoinGameService {
             throw new BadReqException("Error: bad request");
         }
         setPlayerColor(j.getPlayerColor(), curGame, curUser);
+        games.updateGame(curGame);
         return new JoinGameResult(token, null);
     }
 
