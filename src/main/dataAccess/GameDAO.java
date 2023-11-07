@@ -78,7 +78,6 @@ public class GameDAO {
     public void clearGames() {
         try (var preparedStatement = database.prepareStatement("DELETE FROM game")) {
             preparedStatement.executeUpdate();
-//            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
