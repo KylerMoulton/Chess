@@ -10,6 +10,7 @@ import model.GameModel;
 import request.JoinGameRequest;
 import result.JoinGameResult;
 
+import java.sql.SQLException;
 import java.util.Objects;
 
 /**
@@ -21,27 +22,28 @@ import java.util.Objects;
 public class JoinGameService {
     /**
      * Method that joins a game
+     *
      * @param j Takes in a JoinGameRequest
      * @return Returns a JoinGameResult
      * @throws Exception Throws an exception
      */
-    public JoinGameResult joinGame(JoinGameRequest j, String token) throws Exception{
+    public JoinGameResult joinGame(JoinGameRequest j, String token) throws Exception {
         AuthDAO tokens = new AuthDAO();
         GameDAO games = new GameDAO();
-        checkAuthorization(token,tokens);
-        GameModel curGame = validGameReq(j.getGameID(),games);
+        checkAuthorization(token, tokens);
+        GameModel curGame = validGameReq(j.getGameID(), games);
         if (curGame == null) {
-           throw new BadReqException("Error: bad request");
+            throw new BadReqException("Error: bad request");
         }
-        AuthTokenModel curUser = getCurUser(token,tokens);
+        AuthTokenModel curUser = getCurUser(token, tokens);
         if (curUser == null) {
             throw new BadReqException("Error: bad request");
         }
-        setPlayerColor(j.getPlayerColor(),curGame,curUser);
-        return new JoinGameResult(token,null);
+        setPlayerColor(j.getPlayerColor(), curGame, curUser);
+        return new JoinGameResult(token, null);
     }
 
-    private AuthTokenModel getCurUser(String token, AuthDAO authTokens) {
+    private AuthTokenModel getCurUser(String token, AuthDAO authTokens) throws SQLException {
         for (AuthTokenModel tokens : authTokens.getCreatedAuthTokens().values()) {
             if (Objects.equals(tokens.getAuthToken(), token)) {
                 return tokens;
@@ -50,7 +52,7 @@ public class JoinGameService {
         return null;
     }
 
-    private void setPlayerColor(String playerColor, GameModel curGame,AuthTokenModel curUser) throws AlreadyTakenException {
+    private void setPlayerColor(String playerColor, GameModel curGame, AuthTokenModel curUser) throws AlreadyTakenException {
         if (curGame.getWhiteUsername() != null && Objects.equals(playerColor, "WHITE")) {
             throw new AlreadyTakenException("Error: already taken");
         } else if (Objects.equals(playerColor, "WHITE")) {
@@ -58,28 +60,30 @@ public class JoinGameService {
         }
         if (curGame.getBlackUsername() != null && Objects.equals(playerColor, "BLACK")) {
             throw new AlreadyTakenException("Error: already taken");
-        } else if (Objects.equals(playerColor,"BLACK")) {
+        } else if (Objects.equals(playerColor, "BLACK")) {
             curGame.setBlackUsername(curUser.getUsername());
         }
     }
 
     private GameModel validGameReq(Integer gameID, GameDAO games) throws BadReqException {
-    if (gameID != null) {
-        for (GameModel game : games.getAllGames()) {
-            if (game.getGameID() == gameID) {
-                return game;
+        if (gameID != null) {
+            for (GameModel game : games.getAllGames()) {
+                if (game.getGameID() == gameID) {
+                    return game;
+                }
             }
+        } else {
+            throw new BadReqException("Error: bad request");
         }
-    } else {throw new BadReqException("Error: bad request");}
         return null;
     }
 
-    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException {
+    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException, SQLException {
         if (tokens.getCreatedAuthTokens().isEmpty()) {
             throw new UnauthorizedException("Error: unauthorized");
         }
-        if (token!=null){
-            if (tokens.getToken(token)==null) {
+        if (token != null) {
+            if (tokens.getToken(token) == null) {
                 throw new UnauthorizedException("Error: unauthorized");
             }
         }
