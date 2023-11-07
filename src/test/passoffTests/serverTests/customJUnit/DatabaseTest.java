@@ -1,5 +1,6 @@
 package passoffTests.serverTests.customJUnit;
 
+import chess.gameImple;
 import dataAccess.DataAccessException;
 import dataAccess.*;
 import model.*;
@@ -7,9 +8,13 @@ import org.junit.jupiter.api.*;
 import service.ClearService;
 
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.HashSet;
 
 public class DatabaseTest {
     private static final UserModel User = new UserModel("Kyler", "Moulton", "email");
+    private static final GameModel Game = new GameModel(1, User.getUsername() + 1, User.getUsername() + 2, "TestGame", new gameImple());
+    private static final GameModel Game2 = new GameModel(2, User.getUsername() + 1, User.getUsername() + 2, "TestGame", new gameImple());
 
     @BeforeEach
     public void reset() throws Exception {
@@ -168,7 +173,7 @@ public class DatabaseTest {
     }
 
     @Test
-    @Order(3)
+    @Order(14)
     @DisplayName("Valid Delete Auths")
     public void SuccessfulDeleteAuths() throws DataAccessException, SQLException {
         AuthDAO authDAO = new AuthDAO();
@@ -178,5 +183,69 @@ public class DatabaseTest {
         authDAO.clearTokens();
 
         Assertions.assertTrue(authDAO.getCreatedAuthTokens().isEmpty());
+    }
+
+    @Test
+    @Order(15)
+    @DisplayName("Valid Create Game")
+    public void SuccessfulCreateGame() throws DataAccessException, SQLException {
+        GameDAO gameDAO = new GameDAO();
+        gameDAO.insertGame(Game);
+        GameModel model = null;
+        for (GameModel m : gameDAO.getAllGames()) {
+            if (m.equals(Game)) {
+                model = m;
+            }
+        }
+        Assertions.assertEquals(Game, model);
+    }
+
+    @Test
+    @Order(16)
+    @DisplayName("Invalid Create Game")
+    public void UnsuccessfulCreateGame() throws DataAccessException {
+        try {
+            GameDAO gameDAO = new GameDAO();
+            gameDAO.insertGame(new GameModel(1, null, null, null, new gameImple()));
+        } catch (SQLException e) {
+            Assertions.assertEquals(e.getMessage(), "Column 'gameName' cannot be null");
+        }
+    }
+
+    @Test
+    @Order(17)
+    @DisplayName("Valid Get Games")
+    public void SuccessfulGetGames() throws DataAccessException, SQLException {
+        GameDAO gameDAO = new GameDAO();
+        gameDAO.insertGame(Game);
+        gameDAO.insertGame(Game2);
+        Collection<GameModel> expectedGames = new HashSet<>();
+        expectedGames.add(Game2);
+        expectedGames.add(Game);
+        Collection<GameModel> returnedGames = gameDAO.getAllGames();
+        Collection<GameModel> returnedGamesSet = new HashSet<>(returnedGames);
+
+        Assertions.assertEquals(returnedGamesSet, expectedGames);
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("Invalid Get Games")
+    public void UnsuccessfulGetGames() throws DataAccessException {
+        //I took Michael's advice from slack and just made sure I got back an empty array if I didn't insert anything
+        GameDAO gameDAO = new GameDAO();
+        Assertions.assertTrue(gameDAO.getAllGames().isEmpty());
+    }
+
+    @Test
+    @Order(19)
+    @DisplayName("Valid Clear Games")
+    public void SuccessfulClearGames() throws DataAccessException, SQLException {
+        GameDAO gameDAO = new GameDAO();
+        gameDAO.insertGame(Game);
+        gameDAO.insertGame(Game2);
+        gameDAO.clearGames();
+
+        Assertions.assertTrue(gameDAO.getAllGames().isEmpty());
     }
 }

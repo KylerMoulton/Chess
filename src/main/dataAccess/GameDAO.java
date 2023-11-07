@@ -20,27 +20,28 @@ public class GameDAO {
         this.database = new Database().getConnection();
     }
 
-    public void insertGame(GameModel game) {
-        try (var preparedStatement = database.prepareStatement("Insert INTO game(gameID,whiteUsername,blackUsername,gameName) values (?,?,?,?)")) {
+    public void insertGame(GameModel game) throws SQLException {
+        try (var preparedStatement = database.prepareStatement("Insert INTO game(gameID,whiteUsername,blackUsername,gameName,game) values (?,?,?,?,?)")) {
             preparedStatement.setString(1, Integer.toString(game.getGameID()));
             preparedStatement.setString(2, game.getWhiteUsername());
             preparedStatement.setString(3, game.getBlackUsername());
             preparedStatement.setString(4, game.getGameName());
             preparedStatement.setString(5, gameImple.serialization().toJson(game.getGame()));
             preparedStatement.executeUpdate();
-            database.close();
+//            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
+            throw new SQLException(message);
         }
     }
 
     public Collection<GameModel> getAllGames() {
         HashMap<Integer, GameModel> createdGames = new HashMap<>();
-        GameModel createdGame = new GameModel(0, null, null, null, null);
         try (var preparedStatement = database.prepareStatement("SELECT gameID, whiteUsername,blackUsername,gameName,game FROM game")) {
             try (var user = preparedStatement.executeQuery()) {
                 while (user.next()) {
+                    GameModel createdGame = new GameModel(0, null, null, null, null);
                     var gameID = user.getInt("gameID");
                     var whiteUsername = user.getString("whiteUsername");
                     var blackUsername = user.getString("blackUsername");
@@ -52,7 +53,7 @@ public class GameDAO {
                     createdGame.setGameName(gameName);
                     createdGame.setGame(gameImple.serialization().fromJson(game, ChessGame.class));
                     createdGames.put(createdGame.getGameID(), createdGame);
-                    database.close();
+//                    database.close();
                 }
             } catch (SQLException e) {
                 String message = e.getMessage();
@@ -68,7 +69,7 @@ public class GameDAO {
     public void clearGames() {
         try (var preparedStatement = database.prepareStatement("DELETE FROM game")) {
             preparedStatement.executeUpdate();
-            database.close();
+//            database.close();
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
