@@ -8,6 +8,7 @@ import org.junit.jupiter.api.*;
 import service.ClearService;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 
@@ -214,6 +215,32 @@ public class DatabaseTest {
 
     @Test
     @Order(17)
+    @DisplayName("Valid Update Game")
+    public void SuccessfulUpdateGame() throws DataAccessException, SQLException {
+        GameDAO gameDAO = new GameDAO();
+        GameModel expectedGameModel = new GameModel(2, null, null, "TestGame", new gameImple());
+        gameDAO.insertGame(new GameModel(2, null, null, "TestGame", new gameImple()));
+        gameDAO.updateGame(expectedGameModel);
+        Object[] returnedGames = gameDAO.getAllGames().toArray();
+        GameModel returnedGame = (GameModel) returnedGames[0];
+        Assertions.assertEquals(expectedGameModel, returnedGame);
+    }
+
+    @Test
+    @Order(18)
+    @DisplayName("Invalid Update Game")
+    public void UnsuccessfulUpdateGame() throws DataAccessException, SQLException {
+        GameDAO gameDAO = new GameDAO();
+        GameModel expectedGameModel = new GameModel(3, null, null, "TestGame", new gameImple());
+        gameDAO.insertGame(new GameModel(2, null, null, "TestGame", new gameImple()));
+        gameDAO.updateGame(expectedGameModel);
+        Object[] returnedGames = gameDAO.getAllGames().toArray();
+        GameModel returnedGame = (GameModel) returnedGames[0];
+        Assertions.assertNotEquals(expectedGameModel, returnedGame);
+    }
+
+    @Test
+    @Order(19)
     @DisplayName("Valid Get Games")
     public void SuccessfulGetGames() throws DataAccessException, SQLException {
         GameDAO gameDAO = new GameDAO();
@@ -229,7 +256,7 @@ public class DatabaseTest {
     }
 
     @Test
-    @Order(18)
+    @Order(20)
     @DisplayName("Invalid Get Games")
     public void UnsuccessfulGetGames() throws DataAccessException {
         //I took Michael's advice from slack and just made sure I got back an empty array if I didn't insert anything
@@ -238,7 +265,7 @@ public class DatabaseTest {
     }
 
     @Test
-    @Order(19)
+    @Order(21)
     @DisplayName("Valid Clear Games")
     public void SuccessfulClearGames() throws DataAccessException, SQLException {
         GameDAO gameDAO = new GameDAO();
