@@ -83,7 +83,7 @@ public class JoinGameService {
             throw new UnauthorizedException("Error: unauthorized");
         }
         if (token != null) {
-            if (tokens.getToken(token) == null) {
+            if (!tokens.getCreatedAuthTokens().containsKey(token)) {
                 throw new UnauthorizedException("Error: unauthorized");
             }
         }
