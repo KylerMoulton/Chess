@@ -17,6 +17,8 @@ public class Database {
 
     private static final String CONNECTION_URL = "jdbc:mysql://localhost:3306/" + DB_NAME;
 
+    protected static Connection connection;
+
     /**
      * Gets a connection to the database.
      *

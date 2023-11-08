@@ -1,6 +1,7 @@
 package service;
 
 import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
 import dataAccess.GameDAO;
 import exeptions.AlreadyTakenException;
 import exeptions.BadReqException;
@@ -44,7 +45,7 @@ public class JoinGameService {
         return new JoinGameResult(token, null);
     }
 
-    private AuthTokenModel getCurUser(String token, AuthDAO authTokens) throws SQLException {
+    private AuthTokenModel getCurUser(String token, AuthDAO authTokens) throws SQLException, DataAccessException {
         for (AuthTokenModel tokens : authTokens.getCreatedAuthTokens().values()) {
             if (Objects.equals(tokens.getAuthToken(), token)) {
                 return tokens;
@@ -66,7 +67,7 @@ public class JoinGameService {
         }
     }
 
-    private GameModel validGameReq(Integer gameID, GameDAO games) throws BadReqException {
+    private GameModel validGameReq(Integer gameID, GameDAO games) throws BadReqException, DataAccessException {
         if (gameID != null) {
             for (GameModel game : games.getAllGames()) {
                 if (game.getGameID() == gameID) {
@@ -79,7 +80,7 @@ public class JoinGameService {
         return null;
     }
 
-    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException, SQLException {
+    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException, SQLException, DataAccessException {
         if (tokens.getCreatedAuthTokens().isEmpty()) {
             throw new UnauthorizedException("Error: unauthorized");
         }

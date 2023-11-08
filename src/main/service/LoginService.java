@@ -1,6 +1,7 @@
 package service;
 
 import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
 import dataAccess.UserDAO;
 import exeptions.UnauthorizedException;
 import request.LoginRequest;
@@ -30,13 +31,13 @@ public class LoginService {
         return new LoginResult(null, authToken, curUser);
     }
 
-    private void existingUser(String username, UserDAO users) throws UnauthorizedException, SQLException {
+    private void existingUser(String username, UserDAO users) throws UnauthorizedException, SQLException, DataAccessException {
         if (users.GetUser(username).getUsername() == null) {
             throw new UnauthorizedException("Error: unauthorized");
         }
     }
 
-    private void rightPassword(String password, String username, UserDAO users) throws UnauthorizedException, SQLException {
+    private void rightPassword(String password, String username, UserDAO users) throws UnauthorizedException, SQLException, DataAccessException {
         if (!Objects.equals(users.GetUser(username).getPassword(), password)) {
             throw new UnauthorizedException("Error: unauthorized");
         }

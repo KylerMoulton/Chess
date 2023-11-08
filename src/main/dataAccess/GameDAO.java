@@ -12,23 +12,22 @@ import java.util.HashMap;
 /**
  * Class that creates, updates, and deletes GameModels in the Database
  */
-public class GameDAO {
+public class GameDAO extends Database {
     public static int gameID = 1;
-    private final Connection database;
 
-    public GameDAO() throws DataAccessException {
-        this.database = new Database().getConnection();
+    public GameDAO() {
     }
 
-    public void insertGame(GameModel game) throws SQLException {
-        try (var preparedStatement = database.prepareStatement("Insert INTO game(gameID,whiteUsername,blackUsername,gameName,game) values (?,?,?,?,?)")) {
+    public void insertGame(GameModel game) throws SQLException, DataAccessException {
+        Connection con = getConnection();
+        try (var preparedStatement = con.prepareStatement("Insert INTO game(gameID,whiteUsername,blackUsername,gameName,game) values (?,?,?,?,?)")) {
             preparedStatement.setString(1, Integer.toString(game.getGameID()));
             preparedStatement.setString(2, game.getWhiteUsername());
             preparedStatement.setString(3, game.getBlackUsername());
             preparedStatement.setString(4, game.getGameName());
             preparedStatement.setString(5, gameImple.serialization().toJson(game.getGame()));
             preparedStatement.executeUpdate();
-//            database.close();
+            closeConnection(con);
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
@@ -36,18 +35,21 @@ public class GameDAO {
         }
     }
 
-    public void updateGame(GameModel game) throws SQLException {
-        try (var preparedStatement = database.prepareStatement("UPDATE game SET whiteUsername=?,blackUsername=? WHERE gameID=?")) {
+    public void updateGame(GameModel game) throws SQLException, DataAccessException {
+        Connection con = getConnection();
+        try (var preparedStatement = con.prepareStatement("UPDATE game SET whiteUsername=?,blackUsername=? WHERE gameID=?")) {
             preparedStatement.setString(1, game.getWhiteUsername());
             preparedStatement.setString(2, game.getBlackUsername());
             preparedStatement.setString(3, Integer.toString(game.getGameID()));
             preparedStatement.executeUpdate();
+            closeConnection(con);
         }
     }
 
-    public Collection<GameModel> getAllGames() {
+    public Collection<GameModel> getAllGames() throws DataAccessException {
+        Connection con = getConnection();
         HashMap<Integer, GameModel> createdGames = new HashMap<>();
-        try (var preparedStatement = database.prepareStatement("SELECT gameID, whiteUsername,blackUsername,gameName,game FROM game")) {
+        try (var preparedStatement = con.prepareStatement("SELECT gameID, whiteUsername,blackUsername,gameName,game FROM game")) {
             try (var user = preparedStatement.executeQuery()) {
                 while (user.next()) {
                     GameModel createdGame = new GameModel(0, null, null, null, null);
@@ -62,8 +64,8 @@ public class GameDAO {
                     createdGame.setGameName(gameName);
                     createdGame.setGame(gameImple.serialization().fromJson(game, ChessGame.class));
                     createdGames.put(createdGame.getGameID(), createdGame);
-//                    database.close();
                 }
+                closeConnection(con);
             } catch (SQLException e) {
                 String message = e.getMessage();
                 System.out.printf(message);
@@ -75,9 +77,11 @@ public class GameDAO {
         return createdGames.values();
     }
 
-    public void clearGames() {
-        try (var preparedStatement = database.prepareStatement("DELETE FROM game")) {
+    public void clearGames() throws DataAccessException {
+        Connection con = getConnection();
+        try (var preparedStatement = con.prepareStatement("DELETE FROM game")) {
             preparedStatement.executeUpdate();
+            closeConnection(con);
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
