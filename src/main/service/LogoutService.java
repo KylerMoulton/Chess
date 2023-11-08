@@ -1,6 +1,7 @@
 package service;
 
 import dataAccess.AuthDAO;
+import dataAccess.DataAccessException;
 import exeptions.UnauthorizedException;
 import result.LogoutResult;
 
@@ -23,7 +24,7 @@ public class LogoutService {
         return new LogoutResult(null, token);
     }
 
-    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException, SQLException {
+    public void checkAuthorization(String token, AuthDAO tokens) throws UnauthorizedException, SQLException, DataAccessException {
         if (tokens.getCreatedAuthTokens().isEmpty()) {
             throw new UnauthorizedException("Error: unauthorized");
         }

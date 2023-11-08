@@ -5,19 +5,19 @@ import model.UserModel;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-public class UserDAO {
-    private final Connection database;
+public class UserDAO extends Database {
 
-    public UserDAO() throws DataAccessException {
-        this.database = new Database().getConnection();
+    public UserDAO() {
     }
 
-    public void CreateUser(String inputUsername, String inputPassword, String inputEmail) throws SQLException {
-        try (var preparedStatement = database.prepareStatement("Insert INTO user(username,password,email) values (?,?,?)")) {
+    public void CreateUser(String inputUsername, String inputPassword, String inputEmail) throws SQLException, DataAccessException {
+        Connection con = getConnection();
+        try (var preparedStatement = con.prepareStatement("Insert INTO user(username,password,email) values (?,?,?)")) {
             preparedStatement.setString(1, inputUsername);
             preparedStatement.setString(2, inputPassword);
             preparedStatement.setString(3, inputEmail);
             preparedStatement.executeUpdate();
+            closeConnection(con);
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
@@ -25,10 +25,11 @@ public class UserDAO {
         }
     }
 
-    public void DeleteUsers() throws SQLException {
-        try (var preparedStatement = database.prepareStatement("DELETE FROM user")) {
+    public void DeleteUsers() throws SQLException, DataAccessException {
+        Connection con = getConnection();
+        try (var preparedStatement = con.prepareStatement("DELETE FROM user")) {
             preparedStatement.executeUpdate();
-//            database.close();
+            closeConnection(con);
         } catch (SQLException e) {
             String message = e.getMessage();
             System.out.printf(message);
@@ -36,9 +37,10 @@ public class UserDAO {
         }
     }
 
-    public UserModel GetUser(String inputUsername) throws SQLException {
+    public UserModel GetUser(String inputUsername) throws SQLException, DataAccessException {
+        Connection con = getConnection();
         UserModel returnedUser = new UserModel(null, null, null);
-        try (var preparedStatement = database.prepareStatement("SELECT username,password,email FROM user WHERE username=?")) {
+        try (var preparedStatement = con.prepareStatement("SELECT username,password,email FROM user WHERE username=?")) {
             preparedStatement.setString(1, inputUsername);
             try (var user = preparedStatement.executeQuery()) {
                 if (user.next()) {
@@ -48,8 +50,8 @@ public class UserDAO {
                     returnedUser.setUsername(username);
                     returnedUser.setPassword(password);
                     returnedUser.setEmail(email);
-//                database.close();
                 }
+                closeConnection(con);
             } catch (SQLException e) {
                 String message = e.getMessage();
                 System.out.printf(message);
