@@ -1,23 +1,24 @@
 package chess;
 
-import java.util.Set;
-
-public class boardImple implements ChessBoard{
+public class boardImple implements ChessBoard {
     ChessPiece[][] boardArray = new ChessPiece[8][8];
+
     public boardImple(ChessBoard tempBoard) {
         ChessPiece[][] newBoard = new ChessPiece[8][8];
-        for (int i=0;i<8;i++) {
+        for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 ChessPosition curPos = new positionImple(i, j);
                 ChessPiece curPiece = tempBoard.getPiece(curPos);
-                if (curPiece!=null) {
+                if (curPiece != null) {
                     newBoard[i][j] = curPiece;
                 }
             }
         }
     }
-    public boardImple(){
+
+    public boardImple() {
     }
+
     @Override
     public void addPiece(ChessPosition position, ChessPiece piece) {
         boardArray[position.getRow()][position.getColumn()] = piece;
