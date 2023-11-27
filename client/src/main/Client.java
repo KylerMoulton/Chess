@@ -2,14 +2,29 @@ import java.io.IOException;
 import java.util.Objects;
 import java.util.Scanner;
 
+import model.GameModel;
 import request.*;
 import result.*;
 import web.ServerFacade;
 
+import java.io.PrintStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Random;
+
+import static ui.EscapeSequences.*;
+
 public class Client {
     public static ServerFacade server = new ServerFacade();
+    private static String auth;
+
+    private static final int BOARD_SIZE_IN_SQUARES = 8;
+    private static final int SQUARE_SIZE_IN_CHARS = 8;
+    private static final int LINE_WIDTH_IN_CHARS = 1;
+    private static final String EMPTY = " ";
+    private static Random rand = new Random();
 
     public static void main(String[] args) throws Exception {
+        //drawBoard();
         System.out.printf("Welcome to Almost Chess. It's almost like chess, but its not.%n\u001b[5mPlease type Start%n\u001b[0m>>> ");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
@@ -20,6 +35,55 @@ public class Client {
         preLoginUI();
 
     }
+
+    public static void drawBoard() {
+        var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
+        out.print(ERASE_SCREEN);
+        out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLACK);
+        out.print(SET_TEXT_BOLD);
+        drawHeaders(out);
+        drawSquares(out);
+        out.print("\u001b[39:49;0m");
+    }
+
+    private static void drawSquares(PrintStream out) {
+
+    }
+
+    private static void drawHeaders(PrintStream out) {
+        out.print("   ");
+        String[] headers = {"a", "b", "c", "d", "e", "f", "g", "h"};
+        for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
+            drawHeader(out, headers[boardCol]);
+
+            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
+                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
+            }
+        }
+        out.print("   ");
+        out.print(RESET_BG_COLOR);
+        out.print("\u001b[49m");
+        out.println();
+    }
+
+    private static void drawHeader(PrintStream out, String headerText) {
+        int prefixLength = 1;
+        int suffixLength = 1;
+
+        out.print(EMPTY.repeat(prefixLength));
+        printHeaderText(out, headerText);
+        out.print(EMPTY.repeat(suffixLength));
+    }
+
+    private static void printHeaderText(PrintStream out, String player) {
+        out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_BLACK);
+
+        out.print(player);
+
+    }
+
 
     public static void preLoginUI() throws IOException {
         preHelp();
@@ -58,19 +122,49 @@ public class Client {
 
     private static void logout() throws IOException {
         System.out.print("  Thanks for playing Almost Chess\n");
+        LogoutResult logoutResult = server.logoutUser(auth);
         preLoginUI();
     }
 
-    private static void observe() {
+    private static void observe() throws IOException {
+        System.out.printf(" Please enter the Game ID of the game you wish to observe%n>>> ");
+        Scanner joinGameScanner = new Scanner(System.in);
+        String GameID = joinGameScanner.nextLine();
+        JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, null, Integer.parseInt(GameID)));
+        drawBoard();
+        postLoginUI();
     }
 
-    private static void join() {
+    private static void join() throws IOException {
+        System.out.printf(" Please enter the Game ID of the game you wish to join%n>>> ");
+        Scanner joinGameScanner = new Scanner(System.in);
+        String GameID = joinGameScanner.nextLine();
+        System.out.printf(" Please enter the Team Color you wish to join: WHITE/BLACK%n>>> ");
+        Scanner joinGameColorScanner = new Scanner(System.in);
+        String Color = joinGameColorScanner.nextLine();
+        JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, Color, Integer.parseInt(GameID)));
+        drawBoard();
+        postLoginUI();
     }
 
-    private static void list() {
+    private static void list() throws IOException {
+        System.out.printf(" Listing games...%n");
+        ListGamesResult listGamesResult = server.listGames(auth);
+        for (GameModel game : listGamesResult.getGamesList()) {
+            System.out.printf(Integer.toString(game.getGameID()) + " : " + game.getGameName() + " : White Username-" + game.getWhiteUsername() + " : Black Username-" + game.getBlackUsername() + "\n");
+        }
+        //System.out.print(listGamesResult.getGamesList());
+        System.out.print("\nHere is the list of games\n");
+        postLoginUI();
     }
 
-    private static void create() {
+    private static void create() throws IOException {
+        System.out.printf(" Thanks for choosing to create a game: Please enter the name of your game%n>>> ");
+        Scanner createGameScanner = new Scanner(System.in);
+        String gameName = createGameScanner.nextLine();
+        CreateGameResult createGameResult = server.createGame(new CreateGameRequest(gameName, auth));
+        drawBoard();
+        postLoginUI();
     }
 
     public static void preHelp() {
@@ -94,6 +188,14 @@ public class Client {
         Scanner emailScanner = new Scanner(System.in);
         String email = emailScanner.nextLine();
         RegisterResult registerResult = server.registerUser(new RegisterRequest(username, password, email));
+        if (registerResult != null) {
+            auth = registerResult.getAuthToken();
+        } else {
+            System.out.print("\nUnable to register: Please check your username, password, and email and try again\n");
+            System.out.print("If you have already registered please try logging in instead\n");
+            preLoginUI();
+        }
+        assert registerResult != null;
         System.out.print(" Thanks for registering with us " + registerResult.getUsername() + "! Don't worry we only share this information to those who subscribe to our information access subscription\n");
         postLoginUI();
     }
@@ -106,6 +208,7 @@ public class Client {
         Scanner passwordScanner = new Scanner(System.in);
         String password = passwordScanner.nextLine();
         LoginResult loginResult = server.loginUser(new LoginRequest(username, password));
+        auth = loginResult.getAuthToken();
         System.out.printf("Logged in as " + loginResult.getUsername() + "\n");
         postLoginUI();
     }
@@ -127,4 +230,5 @@ public class Client {
         System.out.print("\u001b[0m");
         System.out.print(" >>> ");
     }
+
 }

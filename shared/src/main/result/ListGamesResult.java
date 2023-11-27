@@ -1,8 +1,13 @@
 package result;
 
 
+import chess.ChessBoard;
+import chess.ChessGame;
+import chess.gameImple;
+import com.google.gson.*;
 import model.GameModel;
 
+import java.lang.reflect.Type;
 import java.util.Collection;
 
 /**
@@ -30,8 +35,9 @@ public class ListGamesResult {
 
     /**
      * Constructor for ListGamesResult
+     *
      * @param gameModels Set of all games in the Database
-     * @param message Message returned if HTTP request fails or is successful
+     * @param message    Message returned if HTTP request fails or is successful
      */
 
     public ListGamesResult(Collection<GameModel> gameModels, String message) {
@@ -73,5 +79,19 @@ public class ListGamesResult {
 
     public void setMessage(String message) {
         this.message = message;
+    }
+
+    public static Gson serialization() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        gsonBuilder.registerTypeAdapter(ListGamesResult.class, new ListGamesResult.adapterListGames());
+        return gsonBuilder.create();
+    }
+
+    public static class adapterListGames implements JsonDeserializer<ListGamesResult> {
+        public ListGamesResult deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+            GsonBuilder builder = new GsonBuilder();
+            builder.registerTypeAdapter(ChessGame.class, new gameImple.adapterChessGame());
+            return builder.create().fromJson(jsonElement, ListGamesResult.class);
+        }
     }
 }

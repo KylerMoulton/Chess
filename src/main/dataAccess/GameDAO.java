@@ -62,6 +62,7 @@ public class GameDAO extends Database {
                     createdGame.setWhiteUsername(whiteUsername);
                     createdGame.setBlackUsername(blackUsername);
                     createdGame.setGameName(gameName);
+                    //createdGame.setGame(null);
                     createdGame.setGame(gameImple.serialization().fromJson(game, ChessGame.class));
                     createdGames.put(createdGame.getGameID(), createdGame);
                 }
