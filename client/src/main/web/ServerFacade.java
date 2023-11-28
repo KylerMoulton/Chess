@@ -1,5 +1,6 @@
 package web;
 
+import chess.gameImple;
 import com.google.gson.Gson;
 import request.*;
 import result.*;
@@ -133,7 +134,7 @@ public class ServerFacade {
             Map<String, List<String>> headers = connection.getHeaderFields();
             InputStream responseBody = connection.getInputStream();
             //result = new Gson().fromJson(new InputStreamReader(responseBody), ListGamesResult.class);
-            result = ListGamesResult.serialization().fromJson(new InputStreamReader(responseBody), ListGamesResult.class);
+            result = gameImple.serialization().fromJson(new InputStreamReader(responseBody), ListGamesResult.class);
             responseBody.close();
             return result;
         } else {

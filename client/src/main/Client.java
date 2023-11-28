@@ -1,7 +1,9 @@
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Scanner;
 
+import chess.*;
 import model.GameModel;
 import request.*;
 import result.*;
@@ -17,14 +19,19 @@ public class Client {
     public static ServerFacade server = new ServerFacade();
     private static String auth;
 
+    private static boolean whiteSquare = true;
+
+    private static Collection<GameModel> games;
+
     private static final int BOARD_SIZE_IN_SQUARES = 8;
     private static final int SQUARE_SIZE_IN_CHARS = 8;
     private static final int LINE_WIDTH_IN_CHARS = 1;
     private static final String EMPTY = " ";
     private static Random rand = new Random();
+    private static ChessBoard board = new boardImple();
 
     public static void main(String[] args) throws Exception {
-        //drawBoard();
+//        drawBoard(board);
         System.out.printf("Welcome to Almost Chess. It's almost like chess, but its not.%n\u001b[5mPlease type Start%n\u001b[0m>>> ");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
@@ -36,30 +43,195 @@ public class Client {
 
     }
 
-    public static void drawBoard() {
+    public static void drawBoard(ChessBoard game) {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
-        out.print(ERASE_SCREEN);
-        out.print(SET_BG_COLOR_DARK_GREY);
-        out.print(SET_TEXT_COLOR_BLACK);
-        out.print(SET_TEXT_BOLD);
         drawHeaders(out);
-        drawSquares(out);
+        drawSquares(out, game);
+        drawHeaders(out);
         out.print("\u001b[39:49;0m");
+        out.println();
+        drawHeaders2(out);
+        drawSquares2(out, game);
+        drawHeaders2(out);
     }
 
-    private static void drawSquares(PrintStream out) {
+    private static void drawSquares(PrintStream out, ChessBoard game) {
+        out.print(ERASE_SCREEN);
+        out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_WHITE);
+        out.print(SET_TEXT_BOLD);
+        for (int row = 1; row <= 8; row++) {
+            out.print(ERASE_SCREEN);
+            out.print(SET_BG_COLOR_DARK_GREY);
+            out.print(SET_TEXT_COLOR_WHITE);
+            out.print(SET_TEXT_BOLD);
+            out.print(" " + row + " ");
+            for (int col = 0; col <= 7; col++) {
+                ChessPiece curPiece = game.getPiece(new positionImple(row - 1, col));
+                String s = switchPiece(curPiece);
+                if (curPiece != null) {
+                    if (whiteSquare) {
+                        out.print(SET_BG_COLOR_WHITE);
+                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            out.print(SET_TEXT_COLOR_BLUE);
+                        } else {
+                            out.print(SET_TEXT_COLOR_RED);
+                        }
+                        out.print(" " + s + " ");
+                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)).getPieceType() + " ");
+                        whiteSquare = false;
+                    } else {
+                        out.print(SET_BG_COLOR_BLACK);
+                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            out.print(SET_TEXT_COLOR_BLUE);
+                        } else {
+                            out.print(SET_TEXT_COLOR_RED);
+                        }
+                        out.print(" " + s + " ");
+                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)) + " ");
+                        whiteSquare = true;
+                    }
+                } else {
+                    if (whiteSquare) {
+                        out.print(SET_BG_COLOR_WHITE);
+                        out.print("   ");
+                        whiteSquare = false;
+                    } else {
+                        out.print(SET_BG_COLOR_BLACK);
+                        out.print("   ");
+                        whiteSquare = true;
+                    }
 
+                }
+
+            }
+            out.print(ERASE_SCREEN);
+            out.print(SET_BG_COLOR_DARK_GREY);
+            out.print(SET_TEXT_COLOR_WHITE);
+            out.print(SET_TEXT_BOLD);
+            out.print(" " + row + " ");
+            out.print(RESET_BG_COLOR);
+            out.print("\u001b[49m");
+            out.println();
+            whiteSquare = !whiteSquare;
+        }
+//        out.print("   ");
+        out.print(RESET_BG_COLOR);
+        out.print("\u001b[49m");
+//        out.println();
+    }
+
+    private static void drawSquares2(PrintStream out, ChessBoard game) {
+        out.print(ERASE_SCREEN);
+        out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_WHITE);
+        out.print(SET_TEXT_BOLD);
+        for (int row = 8; row >= 1; row--) {
+            out.print(ERASE_SCREEN);
+            out.print(SET_BG_COLOR_DARK_GREY);
+            out.print(SET_TEXT_COLOR_WHITE);
+            out.print(SET_TEXT_BOLD);
+            out.print(" " + row + " ");
+            for (int col = 7; col >= 0; col--) {
+                ChessPiece curPiece = game.getPiece(new positionImple(row - 1, col));
+                String s = switchPiece(curPiece);
+                if (curPiece != null) {
+                    if (whiteSquare) {
+                        out.print(SET_BG_COLOR_WHITE);
+                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            out.print(SET_TEXT_COLOR_BLUE);
+                        } else {
+                            out.print(SET_TEXT_COLOR_RED);
+                        }
+                        out.print(" " + s + " ");
+                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)).getPieceType() + " ");
+                        whiteSquare = false;
+                    } else {
+                        out.print(SET_BG_COLOR_BLACK);
+                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                            out.print(SET_TEXT_COLOR_BLUE);
+                        } else {
+                            out.print(SET_TEXT_COLOR_RED);
+                        }
+                        out.print(" " + s + " ");
+                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)) + " ");
+                        whiteSquare = true;
+                    }
+                } else {
+                    if (whiteSquare) {
+                        out.print(SET_BG_COLOR_WHITE);
+                        out.print("   ");
+                        whiteSquare = false;
+                    } else {
+                        out.print(SET_BG_COLOR_BLACK);
+                        out.print("   ");
+                        whiteSquare = true;
+                    }
+
+                }
+
+            }
+            out.print(ERASE_SCREEN);
+            out.print(SET_BG_COLOR_DARK_GREY);
+            out.print(SET_TEXT_COLOR_WHITE);
+            out.print(SET_TEXT_BOLD);
+            out.print(" " + row + " ");
+            out.print(RESET_BG_COLOR);
+            out.print("\u001b[49m");
+            out.println();
+            whiteSquare = !whiteSquare;
+        }
+//        out.print("   ");
+        out.print(RESET_BG_COLOR);
+        out.print("\u001b[49m");
+//        out.println();
+    }
+
+    private static String switchPiece(ChessPiece piece) {
+        if (piece == null) {
+            return " ";
+        }
+        return switch (piece.getPieceType()) {
+            case PAWN -> "P";
+            case ROOK -> "R";
+            case KNIGHT -> "N";
+            case KING -> "K";
+            case BISHOP -> "B";
+            case QUEEN -> "Q";
+        };
     }
 
     private static void drawHeaders(PrintStream out) {
+        out.print(ERASE_SCREEN);
+        out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_WHITE);
+        out.print(SET_TEXT_BOLD);
         out.print("   ");
         String[] headers = {"a", "b", "c", "d", "e", "f", "g", "h"};
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
             drawHeader(out, headers[boardCol]);
+//            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
+//                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
+//            }
+        }
+        out.print("   ");
+        out.print(RESET_BG_COLOR);
+        out.print("\u001b[49m");
+        out.println();
+    }
 
-            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
-                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
-            }
+    private static void drawHeaders2(PrintStream out) {
+        out.print(ERASE_SCREEN);
+        out.print(SET_BG_COLOR_DARK_GREY);
+        out.print(SET_TEXT_COLOR_WHITE);
+        out.print(SET_TEXT_BOLD);
+        out.print("   ");
+        String[] headers = {"h", "g", "f", "e", "d", "c", "b", "a"};
+        for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
+            drawHeader(out, headers[boardCol]);
+//            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
+//                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
+//            }
         }
         out.print("   ");
         out.print(RESET_BG_COLOR);
@@ -78,7 +250,7 @@ public class Client {
 
     private static void printHeaderText(PrintStream out, String player) {
         out.print(SET_BG_COLOR_DARK_GREY);
-        out.print(SET_TEXT_COLOR_BLACK);
+        out.print(SET_TEXT_COLOR_WHITE);
 
         out.print(player);
 
@@ -131,7 +303,11 @@ public class Client {
         Scanner joinGameScanner = new Scanner(System.in);
         String GameID = joinGameScanner.nextLine();
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, null, Integer.parseInt(GameID)));
-        drawBoard();
+        for (GameModel game : games) {
+            if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
+                drawBoard(new boardImple());
+            }
+        }
         postLoginUI();
     }
 
@@ -143,13 +319,18 @@ public class Client {
         Scanner joinGameColorScanner = new Scanner(System.in);
         String Color = joinGameColorScanner.nextLine();
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, Color, Integer.parseInt(GameID)));
-        drawBoard();
+        for (GameModel game : games) {
+            if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
+                drawBoard(new boardImple());
+            }
+        }
         postLoginUI();
     }
 
     private static void list() throws IOException {
         System.out.printf(" Listing games...%n");
         ListGamesResult listGamesResult = server.listGames(auth);
+        games = listGamesResult.getGamesList();
         for (GameModel game : listGamesResult.getGamesList()) {
             System.out.printf(Integer.toString(game.getGameID()) + " : " + game.getGameName() + " : White Username-" + game.getWhiteUsername() + " : Black Username-" + game.getBlackUsername() + "\n");
         }
@@ -163,7 +344,6 @@ public class Client {
         Scanner createGameScanner = new Scanner(System.in);
         String gameName = createGameScanner.nextLine();
         CreateGameResult createGameResult = server.createGame(new CreateGameRequest(gameName, auth));
-        drawBoard();
         postLoginUI();
     }
 
@@ -223,7 +403,7 @@ public class Client {
         System.out.print("  create <NAME> - Creates a new game\n");
         System.out.print("  list - Lists all games\n");
         System.out.print("  join <ID> [WHITE|BLACK] - Join a game\n");
-        System.out.print("  spectate <ID> - Spectate a game\n");
+        System.out.print("  observe <ID> - Spectate a game\n");
         System.out.print("  logout - Logout of your account\n");
         System.out.print("  quit - Quit the application\n");
         System.out.print("  help - View possible commands\n\n");
