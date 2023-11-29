@@ -305,7 +305,8 @@ public class Client {
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, null, Integer.parseInt(GameID)));
         for (GameModel game : games) {
             if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
-                drawBoard(new boardImple());
+                board.resetBoard();
+                drawBoard(board);
             }
         }
         postLoginUI();
@@ -321,7 +322,8 @@ public class Client {
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, Color, Integer.parseInt(GameID)));
         for (GameModel game : games) {
             if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
-                drawBoard(new boardImple());
+                board.resetBoard();
+                drawBoard(board);
             }
         }
         postLoginUI();
