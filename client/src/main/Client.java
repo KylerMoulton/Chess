@@ -388,7 +388,12 @@ public class Client {
         Scanner passwordScanner = new Scanner(System.in);
         String password = passwordScanner.nextLine();
         LoginResult loginResult = server.loginUser(new LoginRequest(username, password));
-        auth = loginResult.getAuthToken();
+        if (loginResult != null) {
+            auth = loginResult.getAuthToken();
+        } else {
+            System.out.print("\nUnable to login: Please check your username and password and try again\n");
+            preLoginUI();
+        }
         System.out.printf("Logged in as " + loginResult.getUsername() + "\n");
         postLoginUI();
     }
