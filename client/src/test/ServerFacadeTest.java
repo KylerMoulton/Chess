@@ -39,7 +39,7 @@ public class ServerFacadeTest {
     @Order(3)
     @DisplayName("Valid Login User")
     public void ValidLoginUser() throws IOException {
-        LoginRequest request = new LoginRequest("Kyler", "Moulton");
+        LoginRequest request = new LoginRequest("Kyler", "Password");
         LoginResult result = server.loginUser(request);
         Assertions.assertNotNull(result.getAuthToken());
         Assertions.assertEquals(request.getUsername(), result.getUsername());
@@ -58,7 +58,7 @@ public class ServerFacadeTest {
     @Order(5)
     @DisplayName("Valid Logout User")
     public void ValidLogoutUser() throws IOException {
-        LoginRequest request = new LoginRequest("Kyler", "Moulton");
+        LoginRequest request = new LoginRequest("Kyler", "Password");
         LoginResult result = server.loginUser(request);
         String auth = result.getAuthToken();
         LogoutResult logout = server.logoutUser(auth);
@@ -79,7 +79,7 @@ public class ServerFacadeTest {
     @Order(7)
     @DisplayName("Valid Create Game")
     public void ValidCreateGame() throws IOException {
-        LoginRequest request = new LoginRequest("Kyler", "Moulton");
+        LoginRequest request = new LoginRequest("Kyler", "Password");
         LoginResult result = server.loginUser(request);
         String gameName = UUID.randomUUID().toString();
         CreateGameRequest gameRequest = new CreateGameRequest(gameName, result.getAuthToken());
@@ -108,7 +108,7 @@ public class ServerFacadeTest {
     @Order(9)
     @DisplayName("Valid List Games")
     public void ValidListGames() throws IOException {
-        LoginRequest request = new LoginRequest("Kyler", "Moulton");
+        LoginRequest request = new LoginRequest("Kyler", "Password");
         LoginResult result = server.loginUser(request);
         int beforeListLength = server.listGames(result.getAuthToken()).getGamesList().toArray().length;
         String gameName = UUID.randomUUID().toString();
@@ -122,7 +122,7 @@ public class ServerFacadeTest {
     @Order(10)
     @DisplayName("Invalid List Games")
     public void InvalidListGames() throws IOException {
-        LoginRequest request = new LoginRequest("Kyler", "Moulton");
+        LoginRequest request = new LoginRequest("Kyler", "Password");
         LoginResult result = server.loginUser(request);
         String gameName = UUID.randomUUID().toString();
         CreateGameRequest gameRequest = new CreateGameRequest(gameName, result.getAuthToken());
@@ -134,7 +134,7 @@ public class ServerFacadeTest {
     @Order(11)
     @DisplayName("Valid Join Game")
     public void ValidJoinGame() throws IOException {
-        LoginRequest request = new LoginRequest("Kyler", "Moulton");
+        LoginRequest request = new LoginRequest("Kyler", "Password");
         LoginResult result = server.loginUser(request);
         String gameName = UUID.randomUUID().toString();
         CreateGameRequest gameRequest = new CreateGameRequest(gameName, result.getAuthToken());
@@ -154,7 +154,7 @@ public class ServerFacadeTest {
     @Order(12)
     @DisplayName("Invalid Join Game")
     public void InvalidJoinGame() throws IOException {
-        LoginRequest request = new LoginRequest("Kyler", "Moulton");
+        LoginRequest request = new LoginRequest("Kyler", "Password");
         LoginResult result = server.loginUser(request);
         String gameName = UUID.randomUUID().toString();
         CreateGameRequest gameRequest = new CreateGameRequest(gameName, result.getAuthToken());

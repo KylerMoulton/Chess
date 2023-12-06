@@ -4,10 +4,13 @@ import java.util.Objects;
 import java.util.Scanner;
 
 import chess.*;
+import exception.ResponseException;
 import model.GameModel;
 import request.*;
 import result.*;
 import web.ServerFacade;
+import websocket.WebSocketFacade;
+import websocket.NotificationHandler;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +20,9 @@ import static ui.EscapeSequences.*;
 
 public class Client {
     public static ServerFacade server = new ServerFacade();
+    private final String serverUrl;
+    private static NotificationHandler notificationHandler;
+    private static WebSocketFacade webSocketFacade;
     private static String auth;
 
     private static boolean whiteSquare = true;
@@ -29,6 +35,11 @@ public class Client {
     private static final String EMPTY = " ";
     private static Random rand = new Random();
     private static ChessBoard board = new boardImple();
+
+    public Client(String serverUrl, NotificationHandler notificationHandler) {
+        this.serverUrl = serverUrl;
+        this.notificationHandler = notificationHandler;
+    }
 
     public static void main(String[] args) throws Exception {
 //        drawBoard(board);
@@ -257,7 +268,7 @@ public class Client {
     }
 
 
-    public static void preLoginUI() throws IOException {
+    public static void preLoginUI() throws IOException, ResponseException {
         preHelp();
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
@@ -273,7 +284,7 @@ public class Client {
         }
     }
 
-    public static void postLoginUI() throws IOException {
+    public static void postLoginUI() throws IOException, ResponseException {
         postHelp();
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
@@ -292,13 +303,13 @@ public class Client {
         }
     }
 
-    private static void logout() throws IOException {
+    private static void logout() throws IOException, ResponseException {
         System.out.print("  Thanks for playing Almost Chess\n");
         LogoutResult logoutResult = server.logoutUser(auth);
         preLoginUI();
     }
 
-    private static void observe() throws IOException {
+    private static void observe() throws IOException, ResponseException {
         System.out.printf(" Please enter the Game ID of the game you wish to observe%n>>> ");
         Scanner joinGameScanner = new Scanner(System.in);
         String GameID = joinGameScanner.nextLine();
@@ -312,7 +323,7 @@ public class Client {
         postLoginUI();
     }
 
-    private static void join() throws IOException {
+    private static void join() throws IOException, ResponseException {
         System.out.printf(" Please enter the Game ID of the game you wish to join%n>>> ");
         Scanner joinGameScanner = new Scanner(System.in);
         String GameID = joinGameScanner.nextLine();
@@ -320,6 +331,8 @@ public class Client {
         Scanner joinGameColorScanner = new Scanner(System.in);
         String Color = joinGameColorScanner.nextLine();
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, Color, Integer.parseInt(GameID)));
+        webSocketFacade = new WebSocketFacade("http://localhost:8080", notificationHandler);
+        webSocketFacade.joinGame(Integer.parseInt(GameID), auth, ChessGame.TeamColor.valueOf(Color));
         for (GameModel game : games) {
             if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
                 board.resetBoard();
@@ -329,7 +342,7 @@ public class Client {
         postLoginUI();
     }
 
-    private static void list() throws IOException {
+    private static void list() throws IOException, ResponseException {
         System.out.printf(" Listing games...%n");
         ListGamesResult listGamesResult = server.listGames(auth);
         games = listGamesResult.getGamesList();
@@ -341,7 +354,7 @@ public class Client {
         postLoginUI();
     }
 
-    private static void create() throws IOException {
+    private static void create() throws IOException, ResponseException {
         System.out.printf(" Thanks for choosing to create a game: Please enter the name of your game%n>>> ");
         Scanner createGameScanner = new Scanner(System.in);
         String gameName = createGameScanner.nextLine();
@@ -359,7 +372,7 @@ public class Client {
         System.out.print(" >>> ");
     }
 
-    public static void register() throws IOException {
+    public static void register() throws IOException, ResponseException {
         System.out.printf(" Thanks for choosing to register: Please choose your username%n>>> ");
         Scanner usernameScanner = new Scanner(System.in);
         String username = usernameScanner.nextLine();
@@ -382,7 +395,7 @@ public class Client {
         postLoginUI();
     }
 
-    public static void login() throws IOException {
+    public static void login() throws IOException, ResponseException {
         System.out.printf(" To login please enter your username%n>>> ");
         Scanner usernameScanner = new Scanner(System.in);
         String username = usernameScanner.nextLine();

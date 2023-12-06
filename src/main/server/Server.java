@@ -1,7 +1,9 @@
 package server;
 
 import handlers.*;
+import server.websocket.WebSocketHandler;
 import spark.Spark;
+
 public class Server {
 
     public static void main(String[] args) {
@@ -14,6 +16,7 @@ public class Server {
 
         // Register a directory for hosting static files
         Spark.externalStaticFileLocation("C:\\Users\\kyler\\BYUSophomore\\FallSemester\\CS240\\Chess\\web");
+        Spark.webSocket("/connect", WebSocketHandler.class);
 
         // Register handlers for each endpoint using the method reference syntax
         Spark.delete("/db", (req, res) ->

@@ -46,7 +46,7 @@ public class ServerFacade {
     public LoginResult loginUser(LoginRequest req) throws IOException {
         URL url = new URL("http://localhost:8080/session");
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-        connection.setReadTimeout(5000);
+        connection.setReadTimeout(30000);
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         connection.addRequestProperty("Accept", "application/json");
@@ -64,6 +64,7 @@ public class ServerFacade {
         } else {
             // SERVER RETURNED AN HTTP ERROR
             InputStream responseBody = connection.getErrorStream();
+            System.out.print(responseBody);
             // Read and process error response body from InputStream ...
         }
         return result;
