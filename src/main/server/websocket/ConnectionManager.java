@@ -1,5 +1,6 @@
 package server.websocket;
 
+import com.google.gson.Gson;
 import org.eclipse.jetty.websocket.api.Session;
 import webSocketMessages.serverMessages.ServerMessage;
 
@@ -22,13 +23,25 @@ public class ConnectionManager {
 
     public void broadcast(Integer gameID, String authToken, ServerMessage notification) throws IOException {
         var removeList = new ArrayList<Connection>();
-        for (var c : connections.values()) {
-            if (c.session.isOpen()) {
-                if (!c.authToken.equals(authToken)) {
-                    c.send(notification.toString());
+        if (notification.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME) {
+            for (var c : connections.values()) {
+                if (c.session.isOpen()) {
+                    if (c.authToken.equals(authToken)) {
+                        c.send(new Gson().toJson(notification));
+                    }
+                } else {
+                    removeList.add(c);
                 }
-            } else {
-                removeList.add(c);
+            }
+        } else {
+            for (var c : connections.values()) {
+                if (c.session.isOpen()) {
+                    if (!c.authToken.equals(authToken)) {
+                        c.send(notification.toString());
+                    }
+                } else {
+                    removeList.add(c);
+                }
             }
         }
 

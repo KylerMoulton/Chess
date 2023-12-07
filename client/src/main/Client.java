@@ -298,7 +298,7 @@ public class Client {
             case "help" -> postLoginUI();
             default -> {
                 System.out.print("Invalid Command:");
-                preLoginUI();
+                postLoginUI();
             }
         }
     }
@@ -324,6 +324,8 @@ public class Client {
     }
 
     private static void join() throws IOException, ResponseException {
+        ListGamesResult listGamesResult = server.listGames(auth);
+        games = listGamesResult.getGamesList();
         System.out.printf(" Please enter the Game ID of the game you wish to join%n>>> ");
         Scanner joinGameScanner = new Scanner(System.in);
         String GameID = joinGameScanner.nextLine();

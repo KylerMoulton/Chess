@@ -1,12 +1,14 @@
 package server.websocket;
 
 import chess.ChessGame;
+import chess.gameImple;
 import com.google.gson.Gson;
 import dataAccess.*;
 import exception.ResponseException;
 import org.eclipse.jetty.websocket.api.Session;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
+import serverMessages.loadGame;
 import webSocketMessages.userCommands.UserGameCommand;
 import webSocketMessages.serverMessages.ServerMessage;
 
@@ -21,6 +23,8 @@ public class WebSocketHandler {
 
     @OnWebSocketMessage
     public void onMessage(Session session, String message) throws IOException {
+        System.out.printf("Recieved: %s", message);
+//        session.getRemote().sendString("WebSocket response:" + message);
         UserGameCommand action = new Gson().fromJson(message, UserGameCommand.class);
         switch (action.getCommandType()) {
             case JOIN_PLAYER -> joinPlayer(action.getGameID(), action.getAuthString(), action.getColor(), session);
@@ -31,8 +35,9 @@ public class WebSocketHandler {
     private void joinPlayer(Integer gameID, String authToken, ChessGame.TeamColor color, Session session) throws IOException {
         connections.add(authToken, session);
 //        var message = String.format("%s is in the shop", visitorName);
-        var notification = new ServerMessage(ServerMessage.ServerMessageType.NOTIFICATION);
+        var notification = new loadGame(new gameImple());
         connections.broadcast(gameID, authToken, notification);
+        System.out.print("Joined GAame");
     }
 
 //    private void exit(String visitorName) throws IOException {

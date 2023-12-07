@@ -18,10 +18,11 @@ public class UserGameCommand {
         this.color = null;
     }
 
-    public UserGameCommand(String authToken, Integer gameID, ChessGame.TeamColor color) {
+    public UserGameCommand(String authToken, Integer gameID, ChessGame.TeamColor color, CommandType commandType) {
         this.authToken = authToken;
         this.gameID = gameID;
         this.color = color;
+        this.commandType = commandType;
     }
 
     public enum CommandType {

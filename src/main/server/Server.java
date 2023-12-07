@@ -1,10 +1,13 @@
 package server;
 
 import handlers.*;
+import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import server.websocket.WebSocketHandler;
 import spark.Spark;
 
+@WebSocket
 public class Server {
+    private final WebSocketHandler webSocketHandler = new WebSocketHandler();
 
     public static void main(String[] args) {
         new Server().run();
@@ -40,5 +43,7 @@ public class Server {
         Spark.put("/game", (req, res) ->
                 (new JoinGameHandler()).handleRequest(req,
                         res));
+        Spark.get("/echo/:msg", (req, res) -> "HTTP response: " + req.params("msg"));
+        
     }
 }

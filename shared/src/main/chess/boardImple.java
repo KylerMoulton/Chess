@@ -17,6 +17,7 @@ public class boardImple implements ChessBoard {
     }
 
     public boardImple() {
+        resetBoard();
     }
 
     @Override
