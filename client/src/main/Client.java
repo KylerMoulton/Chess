@@ -316,8 +316,10 @@ public class Client {
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, null, Integer.parseInt(GameID)));
         for (GameModel game : games) {
             if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
-                board.resetBoard();
+                webSocketFacade = new WebSocketFacade("http://localhost:8080", notificationHandler);
+                webSocketFacade.observeGame(Integer.parseInt(GameID), auth, null);
                 drawBoard(board);
+                postJoin(game);
             }
         }
         postLoginUI();
@@ -333,15 +335,66 @@ public class Client {
         Scanner joinGameColorScanner = new Scanner(System.in);
         String Color = joinGameColorScanner.nextLine();
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, Color, Integer.parseInt(GameID)));
-        webSocketFacade = new WebSocketFacade("http://localhost:8080", notificationHandler);
-        webSocketFacade.joinGame(Integer.parseInt(GameID), auth, ChessGame.TeamColor.valueOf(Color));
         for (GameModel game : games) {
             if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
-                board.resetBoard();
-                drawBoard(board);
+                webSocketFacade = new WebSocketFacade("http://localhost:8080", notificationHandler);
+                webSocketFacade.joinGame(Integer.parseInt(GameID), auth, ChessGame.TeamColor.valueOf(Color));
+                drawBoard(game.getGame().getBoard());
+                postJoin(game);
             }
         }
         postLoginUI();
+    }
+
+    private static void postJoin(GameModel game) throws ResponseException, IOException {
+        joinHelp();
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        switch (line) {
+            case "R" -> drawBoard(game.getGame().getBoard());
+            case "H" -> list();
+            case "M" -> makeMove(game);
+            case "Resign" -> observe();
+            case "Leave" -> logout();
+            case "help" -> postJoin(game);
+            default -> {
+                System.out.print("Invalid Command:");
+                postJoin(game);
+            }
+        }
+    }
+
+    private static void makeMove(GameModel game) throws ResponseException, IOException {
+        System.out.print("Where is the piece you want to move: ex(1a)");
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        int row = line.charAt(0);
+        int col = line.charAt(1) - 'a';
+        ChessPosition startPosition = new positionImple(row, col);
+        System.out.print("Where do you want to move: ex(1a)");
+        Scanner scanner2 = new Scanner(System.in);
+        String line2 = scanner2.nextLine();
+        int row2 = line2.charAt(0);
+        int col2 = line2.charAt(1) - 'a';
+        ChessPosition endPosition = new positionImple(row2, col2);
+        ChessPiece.PieceType pieceType = game.getGame().getBoard().getPiece(startPosition).getPieceType();
+        ChessMove move = new moveImple(startPosition, endPosition, pieceType);
+        webSocketFacade = new WebSocketFacade("http://localhost:8080", notificationHandler);
+        webSocketFacade.makeMove(game.getGameID(), auth, move);
+        drawBoard(game.getGame().getBoard());
+        postJoin(game);
+    }
+
+    public static void joinHelp() {
+        System.out.print("\u001b[35m");
+        System.out.print("  R - Redraw Chess Board\n");
+        System.out.print("  H - Highlight Legal Moves");
+        System.out.print("  M - Make Move\n");
+        System.out.print("  Resign\n");
+        System.out.print("  Leave\n");
+        System.out.print("  help - View possible commands\n\n");
+        System.out.print("\u001b[0m");
+        System.out.print(" >>> ");
     }
 
     private static void list() throws IOException, ResponseException {

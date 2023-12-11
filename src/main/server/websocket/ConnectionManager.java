@@ -6,48 +6,61 @@ import webSocketMessages.serverMessages.ServerMessage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class ConnectionManager {
-    public final ConcurrentHashMap<String, Connection> connections = new ConcurrentHashMap<>();
+    public final ConcurrentHashMap<Integer, List<Connection>> connections = new ConcurrentHashMap<>();
     //set of gameID, authtoken,connection
 
-    public void add(String visitorName, Session session) {
-        var connection = new Connection(visitorName, session);
-        connections.put(visitorName, connection);
+    public void add(Integer gameID, String auth, Session session) {
+        Connection connection = new Connection(auth, session);
+        if (connections.containsKey(gameID)) {
+            List<Connection> connectionList = connections.get(gameID);
+            connectionList.add(connection);
+            connections.put(gameID, connectionList);
+        } else {
+            List<Connection> connectionList = new ArrayList<>();
+            connectionList.add(connection);
+            connections.put(gameID, connectionList);
+        }
+
     }
 
     public void remove(String visitorName) {
         connections.remove(visitorName);
     }
 
-    public void broadcast(Integer gameID, String authToken, ServerMessage notification) throws IOException {
-        var removeList = new ArrayList<Connection>();
-        if (notification.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME) {
-            for (var c : connections.values()) {
-                if (c.session.isOpen()) {
-                    if (c.authToken.equals(authToken)) {
-                        c.send(new Gson().toJson(notification));
-                    }
-                } else {
-                    removeList.add(c);
-                }
-            }
-        } else {
-            for (var c : connections.values()) {
-                if (c.session.isOpen()) {
-                    if (!c.authToken.equals(authToken)) {
-                        c.send(notification.toString());
-                    }
-                } else {
-                    removeList.add(c);
-                }
-            }
-        }
-
-        // Clean up any connections that were left open.
-        for (var c : removeList) {
-            connections.remove(c.authToken);
-        }
+    public ConcurrentHashMap<Integer, List<Connection>> getConnections() {
+        return connections;
     }
+
+    //    public void broadcast(Integer gameID, String authToken, ServerMessage notification) throws IOException {
+//        var removeList = new ArrayList<Connection>();
+//        if (notification.getServerMessageType() == ServerMessage.ServerMessageType.LOAD_GAME || notification.getServerMessageType() == ServerMessage.ServerMessageType.ERROR) {
+//            for (List<Connection> c : connections.values()) {
+//                if (c.get(gameID).session.isOpen()) {
+//                    if (c.get(gameID).session.isOpen()) {
+//                        if (c.get(gameID).auth.equals(authToken)) {
+//                            c.get(gameID).send(new Gson().toJson(notification));
+//                        }
+//                    }
+//                } else {
+//                    removeList.add(c.get(gameID));
+//                }
+//            }
+//        } else if (notification.getServerMessageType() == ServerMessage.ServerMessageType.NOTIFICATION) {
+//            for (var c : connections.values()) {
+//                if (c.get(gameID).session.isOpen()) {
+//                    if (c.get(gameID).session.isOpen()) {
+//                        if (!c.get(gameID).auth.equals(authToken)) {
+//                            c.get(gameID).send(new Gson().toJson(notification));
+//                        }
+//                    }
+//                } else {
+//                    removeList.add(c.get(gameID));
+//                }
+//            }
+//        }
+//    }
 }

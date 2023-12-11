@@ -176,7 +176,8 @@ public class WebSocketTests {
 
         try {
             bobMessages = bobResult.get(waitTime * 2, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received message
         Assertions.assertEquals(1, bobMessages.size(),
@@ -205,7 +206,8 @@ public class WebSocketTests {
         try {
             jamesMessages = jamesResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
             bobMessages = bobResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check james messages
         Assertions.assertEquals(1, jamesMessages.size(),
@@ -245,7 +247,8 @@ public class WebSocketTests {
 
         try {
             bobMessages = bobResult.get(waitTime * 2, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received message
         Assertions.assertEquals(1, bobMessages.size(),
@@ -276,9 +279,10 @@ public class WebSocketTests {
         testExecutor.submit(alfredClient.getSendMessageRunnable(joinCommand, readyLatch));
         Future<List<TestModels.TestMessage>> alfredResult =
                 alfredExecutor.submit(new GetServerMessages(1, alfredClient, readyLatch, waitTime));
-        try{
+        try {
             alfredMessages = alfredResult.get(waitTime * 2, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received messages
         Assertions.assertEquals(1, alfredMessages.size(),
@@ -309,9 +313,10 @@ public class WebSocketTests {
         testExecutor.submit(jamesClient.getSendMessageRunnable(joinCommand, readyLatch));
         Future<List<TestModels.TestMessage>> jamesResult =
                 jamesExecutor.submit(new GetServerMessages(1, jamesClient, readyLatch, waitTime));
-        try{
+        try {
             jamesMessages = jamesResult.get(waitTime * 2, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received messages
         Assertions.assertEquals(1, jamesMessages.size(),
@@ -345,7 +350,8 @@ public class WebSocketTests {
 
         try {
             bobMessages = bobResult.get(waitTime * 2, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received message
         Assertions.assertEquals(1, bobMessages.size(),
@@ -378,7 +384,8 @@ public class WebSocketTests {
 
         try {
             bobMessages = bobResult.get(waitTime, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received message
         Assertions.assertEquals(1, bobMessages.size(),
@@ -402,7 +409,8 @@ public class WebSocketTests {
                 bobExecutor.submit(new GetServerMessages(1, alfredClient, readyLatch, waitTime));
         try {
             alfredMessages = alfredResult.get(waitTime * 2, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received messages
         Assertions.assertEquals(1, alfredMessages.size(),
@@ -432,7 +440,8 @@ public class WebSocketTests {
         try {
             jamesMessages = jamesResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
             bobMessages = bobResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check james messages
         Assertions.assertEquals(1, jamesMessages.size(),
@@ -516,7 +525,8 @@ public class WebSocketTests {
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //alfred gets Load Game, everyone else gets notification
@@ -563,7 +573,8 @@ public class WebSocketTests {
 
         try {
             bobMessages = bobResult.get(waitTime * 2, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check received message
         Assertions.assertEquals(1, bobMessages.size(),
@@ -702,7 +713,8 @@ public class WebSocketTests {
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //bob should get load game, everyone else should get load game & notification
@@ -835,7 +847,8 @@ public class WebSocketTests {
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //bob should have gotten error message
@@ -944,7 +957,8 @@ public class WebSocketTests {
             bobMessages = bobResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //james should have gotten error message
@@ -1053,7 +1067,8 @@ public class WebSocketTests {
             bobMessages = bobResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //james should have gotten error message
@@ -1161,7 +1176,8 @@ public class WebSocketTests {
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             bobMessages = bobResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //james should have gotten error message
@@ -1285,7 +1301,8 @@ public class WebSocketTests {
             bobMessages = bobResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //james should have gotten error message
@@ -1385,7 +1402,8 @@ public class WebSocketTests {
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //everyone should have gotten a single NOTIFICATION
@@ -1403,8 +1421,94 @@ public class WebSocketTests {
                 "Expected 1 message for Alfred, got " + alfredMessages.size());
         Assertions.assertEquals(TestModels.TestServerMessageType.NOTIFICATION, alfredMessages.get(0).serverMessageType,
                 "Alfred didn't get NOTIFICATION message");
+    }
 
 
+    @Test
+    @Order(17)
+    @DisplayName("Move After Resign")
+    public void moveAfterResign() throws ExecutionException, InterruptedException, TimeoutException {
+        //have bob join the game as a player
+        TestModels.TestCommand joinCommand = new TestModels.TestCommand();
+        joinCommand.commandType = TestModels.TestCommandType.JOIN_PLAYER;
+        joinCommand.authToken = bobAuth;
+        joinCommand.playerColor = ChessGame.TeamColor.WHITE;
+        joinCommand.gameID = fullGame;
+
+        //wait for bob joining as a player to go through
+        bobClient.connect();
+        CountDownLatch readyLatch = new CountDownLatch(1);
+        testExecutor.submit(bobClient.getSendMessageRunnable(joinCommand, readyLatch));
+        bobExecutor.submit(new GetServerMessages(1, bobClient, readyLatch))
+                .get(waitTime, TimeUnit.MILLISECONDS);
+
+        //have james join as a player
+        joinCommand = new TestModels.TestCommand();
+        joinCommand.commandType = TestModels.TestCommandType.JOIN_PLAYER;
+        joinCommand.playerColor = ChessGame.TeamColor.BLACK;
+        joinCommand.authToken = jamesAuth;
+        joinCommand.gameID = fullGame;
+
+        //wait for james joining as a player to go through
+        jamesClient.connect();
+        readyLatch = new CountDownLatch(2);
+        testExecutor.submit(jamesClient.getSendMessageRunnable(joinCommand, readyLatch));
+        Future<List<TestModels.TestMessage>> jamesResult =
+                jamesExecutor.submit(new GetServerMessages(1, jamesClient, readyLatch));
+        Future<List<TestModels.TestMessage>> bobResult =
+                bobExecutor.submit(new GetServerMessages(1, bobClient, readyLatch));
+        bobResult.get(2 * waitTime, TimeUnit.MILLISECONDS);
+        jamesResult.get(2 * waitTime, TimeUnit.MILLISECONDS);
+
+
+        //have alfred join as an observer
+        joinCommand = new TestModels.TestCommand();
+        joinCommand.commandType = TestModels.TestCommandType.JOIN_OBSERVER;
+        joinCommand.authToken = alfredAuth;
+        joinCommand.gameID = fullGame;
+
+
+        //wait for alfred joining as an observer to go through
+        alfredClient.connect();
+        readyLatch = new CountDownLatch(3);
+        testExecutor.submit(alfredClient.getSendMessageRunnable(joinCommand, readyLatch));
+        Future<List<TestModels.TestMessage>> alfredResult =
+                alfredExecutor.submit(new GetServerMessages(1, alfredClient, readyLatch));
+        bobResult = bobExecutor.submit(new GetServerMessages(1, bobClient, readyLatch));
+        jamesResult = jamesExecutor.submit(new GetServerMessages(1, jamesClient, readyLatch));
+        alfredResult.get(3 * waitTime, TimeUnit.MILLISECONDS);
+        bobResult.get(3 * waitTime, TimeUnit.MILLISECONDS);
+        jamesResult.get(3 * waitTime, TimeUnit.MILLISECONDS);
+
+        //have james resign
+        //create command
+        TestModels.TestCommand resignation = new TestModels.TestCommand();
+        resignation.commandType = TestModels.TestCommandType.RESIGN;
+        resignation.authToken = jamesAuth;
+        resignation.gameID = fullGame;
+
+        //ready message
+        readyLatch = new CountDownLatch(3);
+        testExecutor.submit(jamesClient.getSendMessageRunnable(resignation, readyLatch));
+
+        //start getting messages
+        bobResult = bobExecutor.submit(new GetServerMessages(1, bobClient, readyLatch, waitTime));
+        jamesResult = jamesExecutor.submit(new GetServerMessages(1, jamesClient, readyLatch, waitTime));
+        alfredResult = alfredExecutor.submit(new GetServerMessages(1, alfredClient, readyLatch, waitTime));
+
+        //prep messages lists
+        List<TestModels.TestMessage> bobMessages = new ArrayList<>();
+        List<TestModels.TestMessage> jamesMessages = new ArrayList<>();
+        List<TestModels.TestMessage> alfredMessages = new ArrayList<>();
+
+        //wait to get all messages
+        try {
+            bobMessages = bobResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
+            jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
+            alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
+
+        } catch (TimeoutException ignore) {
+        }
 
         //bob attempts to make a move after james resigned
         ChessPosition startingPosition = TestFactory.getNewPosition(2, 5);
@@ -1441,7 +1545,8 @@ public class WebSocketTests {
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //bob should have gotten error message
@@ -1459,7 +1564,7 @@ public class WebSocketTests {
 
 
     @Test
-    @Order(17)
+    @Order(18)
     @DisplayName("Observer Resign")
     public void invalidResignObserver() throws ExecutionException, InterruptedException, TimeoutException {
         //have bob join the game as a player
@@ -1541,7 +1646,8 @@ public class WebSocketTests {
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             bobMessages = bobResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //bob should have gotten error message
@@ -1558,7 +1664,7 @@ public class WebSocketTests {
 
 
     @Test
-    @Order(18)
+    @Order(19)
     @DisplayName("Game Over Resign")
     public void invalidResignGameOver() throws ExecutionException, InterruptedException, TimeoutException {
         //have bob join the game as a player
@@ -1655,7 +1761,8 @@ public class WebSocketTests {
             jamesMessages = jamesResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             bobMessages = bobResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 4, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         //bob should have gotten error message
@@ -1673,7 +1780,7 @@ public class WebSocketTests {
 
 
     @Test
-    @Order(19)
+    @Order(20)
     @DisplayName("Leave Game")
     public void leaveGame() throws ExecutionException, InterruptedException, TimeoutException {
         //have bob join the game as a player
@@ -1753,7 +1860,8 @@ public class WebSocketTests {
         try {
             jamesMessages = jamesResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
             alfredMessages = alfredResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
         //check message contents
         Assertions.assertEquals(1, alfredMessages.size(),
@@ -1794,7 +1902,8 @@ public class WebSocketTests {
             jamesMessages = jamesResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
             bobMessages = bobResult.get(waitTime * 3, TimeUnit.MILLISECONDS);
 
-        } catch (TimeoutException ignore) {}
+        } catch (TimeoutException ignore) {
+        }
 
 
         //try message contents
@@ -1837,7 +1946,7 @@ public class WebSocketTests {
         public List<TestModels.TestMessage> call() throws Exception {
             latch = new CountDownLatch(numMessagesExpected);
             readyLatch.countDown();
-            if(waitTime != null) Thread.sleep(waitTime);
+            if (waitTime != null) Thread.sleep(waitTime);
             latch.await();
             return messages;
         }

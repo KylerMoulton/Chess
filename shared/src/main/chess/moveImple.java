@@ -2,15 +2,17 @@ package chess;
 
 import java.util.Objects;
 
-public class moveImple implements ChessMove{
-    private ChessPosition startPosition;
-    private ChessPosition endPosition;
+public class moveImple implements ChessMove {
+    private positionImple startPosition;
+    private positionImple endPosition;
     private ChessPiece.PieceType promotionPiece;
+
     public moveImple(ChessPosition start, ChessPosition end, ChessPiece.PieceType piece) {
-        this.startPosition = start;
-        this.endPosition = end;
+        this.startPosition = (positionImple) start;
+        this.endPosition = (positionImple) end;
         this.promotionPiece = piece;
     }
+
     @Override
     public ChessPosition getStartPosition() {
         return startPosition;

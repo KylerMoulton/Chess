@@ -12,6 +12,11 @@ public class gameImple implements ChessGame {
     public TeamColor teamTurn;
     public ChessBoard gameBoard;
 
+    public gameImple() {
+        setBoard(new boardImple());
+        setTeamTurn(TeamColor.WHITE);
+    }
+
     @Override
     public TeamColor getTeamTurn() {
         return teamTurn;
@@ -157,28 +162,48 @@ public class gameImple implements ChessGame {
     public static Gson serialization() {
         GsonBuilder gsonBuilder = new GsonBuilder();
         gsonBuilder.registerTypeAdapter(ChessGame.class, new adapterChessGame());
+        gsonBuilder.registerTypeAdapter(ChessBoard.class, new adapterChessBoard());
+        gsonBuilder.registerTypeAdapter(ChessPiece.class, new adapterPiece());
         return gsonBuilder.create();
     }
 
     public static class adapterChessGame implements JsonDeserializer<ChessGame> {
         public ChessGame deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(ChessBoard.class, new adapterChessBoard());
-            return builder.create().fromJson(jsonElement, gameImple.class);
+            return jsonDeserializationContext.deserialize(jsonElement, gameImple.class);
         }
     }
 
     public static class adapterChessBoard implements JsonDeserializer<ChessBoard> {
         public ChessBoard deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            GsonBuilder builder = new GsonBuilder();
-            builder.registerTypeAdapter(ChessBoard.class, new adapterPiece());
-            return builder.create().fromJson(jsonElement, boardImple.class);
+            return jsonDeserializationContext.deserialize(jsonElement, boardImple.class);
         }
     }
 
     public static class adapterPiece implements JsonDeserializer<ChessPiece> {
         public ChessPiece deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-            return new Gson().fromJson(jsonElement, pieceImple.class);
+            String pieceType = jsonElement.getAsJsonObject().get("pieceType").getAsString();
+            switch (pieceType) {
+                case "ROOK" -> {
+                    return jsonDeserializationContext.deserialize(jsonElement, rookImple.class);
+                }
+                case "PAWN" -> {
+                    return jsonDeserializationContext.deserialize(jsonElement, pawnImple.class);
+                }
+                case "QUEEN" -> {
+                    return jsonDeserializationContext.deserialize(jsonElement, queenImple.class);
+                }
+                case "KING" -> {
+                    return jsonDeserializationContext.deserialize(jsonElement, kingImple.class);
+                }
+                case "KNIGHT" -> {
+                    return jsonDeserializationContext.deserialize(jsonElement, knightImple.class);
+                }
+                case "BISHOP" -> {
+                    return jsonDeserializationContext.deserialize(jsonElement, bishopImple.class);
+                }
+            }
+
+            return null;
         }
     }
 }
