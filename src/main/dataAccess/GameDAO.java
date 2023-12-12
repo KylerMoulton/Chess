@@ -2,6 +2,7 @@ package dataAccess;
 
 import chess.ChessGame;
 import chess.gameImple;
+import com.google.gson.Gson;
 import model.GameModel;
 
 import java.sql.Connection;
@@ -41,6 +42,16 @@ public class GameDAO extends Database {
             preparedStatement.setString(1, game.getWhiteUsername());
             preparedStatement.setString(2, game.getBlackUsername());
             preparedStatement.setString(3, Integer.toString(game.getGameID()));
+            preparedStatement.executeUpdate();
+            closeConnection(con);
+        }
+    }
+
+    public void updateGameInfo(GameModel game) throws DataAccessException, SQLException {
+        Connection con = getConnection();
+        try (var preparedStatement = con.prepareStatement("UPDATE game SET game=? WHERE gameID=?")) {
+            preparedStatement.setString(1, new Gson().toJson(game.getGame()));
+            preparedStatement.setInt(2, game.getGameID());
             preparedStatement.executeUpdate();
             closeConnection(con);
         }

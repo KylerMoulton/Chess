@@ -319,7 +319,7 @@ public class Client {
                 webSocketFacade = new WebSocketFacade("http://localhost:8080", notificationHandler);
                 webSocketFacade.observeGame(Integer.parseInt(GameID), auth, null);
                 drawBoard(board);
-                postJoin(game);
+                observerPostJoin(game);
             }
         }
         postLoginUI();
@@ -346,6 +346,21 @@ public class Client {
         postLoginUI();
     }
 
+    private static void observerPostJoin(GameModel game) throws ResponseException, IOException {
+        joinHelpObserver();
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        switch (line) {
+            case "R" -> drawBoard(game.getGame().getBoard());
+            case "Leave" -> logout();
+            case "help" -> postJoin(game);
+            default -> {
+                System.out.print("Invalid Command:");
+                postJoin(game);
+            }
+        }
+    }
+
     private static void postJoin(GameModel game) throws ResponseException, IOException {
         joinHelp();
         Scanner scanner = new Scanner(System.in);
@@ -354,13 +369,25 @@ public class Client {
             case "R" -> drawBoard(game.getGame().getBoard());
             case "H" -> list();
             case "M" -> makeMove(game);
-            case "Resign" -> observe();
+            case "Resign" -> resign(game);
             case "Leave" -> logout();
             case "help" -> postJoin(game);
             default -> {
                 System.out.print("Invalid Command:");
                 postJoin(game);
             }
+        }
+    }
+
+    private static void resign(GameModel game) throws ResponseException, IOException {
+        System.out.printf("Are you sure you would like to resign? (Y/N)%n>>>");
+        Scanner scanner = new Scanner(System.in);
+        String line = scanner.nextLine();
+        if (Objects.equals(line, "N")) {
+            postJoin(game);
+        } else if (Objects.equals(line, "Y")) {
+            webSocketFacade = new WebSocketFacade("http://localhost:8080", notificationHandler);
+            webSocketFacade.resign(game.getGameID(), auth, null);
         }
     }
 
@@ -391,6 +418,15 @@ public class Client {
         System.out.print("  H - Highlight Legal Moves");
         System.out.print("  M - Make Move\n");
         System.out.print("  Resign\n");
+        System.out.print("  Leave\n");
+        System.out.print("  help - View possible commands\n\n");
+        System.out.print("\u001b[0m");
+        System.out.print(" >>> ");
+    }
+
+    public static void joinHelpObserver() {
+        System.out.print("\u001b[35m");
+        System.out.print("  R - Redraw Chess Board\n");
         System.out.print("  Leave\n");
         System.out.print("  help - View possible commands\n\n");
         System.out.print("\u001b[0m");

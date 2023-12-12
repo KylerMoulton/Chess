@@ -11,10 +11,22 @@ import java.util.Set;
 public class gameImple implements ChessGame {
     public TeamColor teamTurn;
     public ChessBoard gameBoard;
+    public boolean gameOver;
 
     public gameImple() {
         setBoard(new boardImple());
         setTeamTurn(TeamColor.WHITE);
+        gameOver = false;
+    }
+
+    @Override
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    @Override
+    public void setIsGameOver() {
+        gameOver = true;
     }
 
     @Override
@@ -119,6 +131,7 @@ public class gameImple implements ChessGame {
                     if (curPiece != null) {
                         if (curPiece.getTeamColor() == teamColor) {
                             if (validMoves(curPos).isEmpty()) {
+                                gameOver = true;
                                 return true;
                             }
                         }
@@ -138,15 +151,18 @@ public class gameImple implements ChessGame {
                     ChessPiece curPiece = getBoard().getPiece(curPos);
                     if (curPiece != null) {
                         if (curPiece.getTeamColor() == teamColor) {
-                            if (validMoves(curPos).isEmpty()) {
-                                return true;
+                            if (!validMoves(curPos).isEmpty()) {
+                                return false;
                             }
                         }
                     }
                 }
             }
+            gameOver = true;
+            return true;
         }
-        return false;
+        gameOver = true;
+        return true;
     }
 
     @Override

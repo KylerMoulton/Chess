@@ -33,6 +33,7 @@ public class WebSocketHandler {
             case JOIN_PLAYER -> joinPlayer(action.getGameID(), action.getAuthString(), action.getColor(), session);
             case JOIN_OBSERVER -> observeGame(action.getGameID(), action.getAuthString(), session);
             case MAKE_MOVE -> makeMove(action.getGameID(), action.getAuthString(), action.getMove(), session);
+            case RESIGN -> resign(action.getGameID(), action.getAuthString(), session);
         }
     }
 
@@ -129,6 +130,11 @@ public class WebSocketHandler {
             }
         }
         assert curGame != null;
+        if (curGame.getGame().isGameOver() || curGame.getGame().isInCheckmate(ChessGame.TeamColor.WHITE) || curGame.getGame().isInCheckmate(ChessGame.TeamColor.BLACK) || curGame.getGame().isInStalemate(ChessGame.TeamColor.WHITE) || curGame.getGame().isInStalemate(ChessGame.TeamColor.BLACK)) {
+            var errorNotification = new errorMessage("Error: The game is over");
+            session.getRemote().sendString(new Gson().toJson(errorNotification));
+            return;
+        }
         List<ChessMove> validMovesList = curGame.getGame().validMoves(move.getStartPosition()).stream().toList();
         if (validMovesList.isEmpty()) {
             var errorNotification = new errorMessage("Error: That is not a valid move");
@@ -139,8 +145,10 @@ public class WebSocketHandler {
                 if (chessMove.getEndPosition().getRow() == move.getEndPosition().getRow() && chessMove.getEndPosition().getColumn() == move.getEndPosition().getColumn()) {
                     if (curGame.getGame().getTeamTurn() == ChessGame.TeamColor.WHITE && Objects.equals(auth.getToken(authToken).getUsername(), curGame.getWhiteUsername())) {
                         curGame.getGame().makeMove(move);
+                        game.updateGameInfo(curGame);
                     } else if (curGame.getGame().getTeamTurn() == ChessGame.TeamColor.BLACK && Objects.equals(auth.getToken(authToken).getUsername(), curGame.getBlackUsername())) {
                         curGame.getGame().makeMove(move);
+                        game.updateGameInfo(curGame);
                     } else {
                         var errorNotification = new errorMessage("Error: It is not your turn");
                         session.getRemote().sendString(new Gson().toJson(errorNotification));
@@ -149,16 +157,6 @@ public class WebSocketHandler {
                 }
             }
         }
-//        if (validMovesList.contains(move.getEndPosition())) {
-//            if (curGame.getGame().getTeamTurn() == ChessGame.TeamColor.WHITE && Objects.equals(auth.getToken(authToken).getUsername(), curGame.getWhiteUsername())) {
-//                curGame.getGame().makeMove(move);
-//            } else if (curGame.getGame().getTeamTurn() == ChessGame.TeamColor.BLACK && Objects.equals(auth.getToken(authToken).getUsername(), curGame.getBlackUsername())) {
-//                curGame.getGame().makeMove(move);
-//            } else {
-//                var errorNotification = new errorMessage("Error: It is not your turn");
-//                session.getRemote().sendString(new Gson().toJson(errorNotification));
-//            }
-//        }
         List<Connection> users = connections.connections.get(gameID);
         for (Connection user : users) {
             var loadGameNotification = new loadGame(curGame.getGame());
@@ -172,4 +170,23 @@ public class WebSocketHandler {
         }
     }
 
+    private void resign(Integer gameID, String authToken, Session session) throws DataAccessException, SQLException, IOException {
+        GameDAO game = new GameDAO();
+        AuthDAO auth = new AuthDAO();
+        GameModel curGame = null;
+        for (GameModel games : game.getAllGames()) {
+            if (games.getGameID() == gameID) {
+                curGame = games;
+            }
+        }
+        assert curGame != null;
+        curGame.getGame().setIsGameOver();
+        game.updateGameInfo(curGame);
+        String username = auth.getToken(authToken).getUsername();
+        List<Connection> users = connections.connections.get(gameID);
+        for (Connection user : users) {
+            var resignNotification = new notificationMessage("Player " + username + " has resigned");
+            user.session.getRemote().sendString(new Gson().toJson(resignNotification));
+        }
+    }
 }
