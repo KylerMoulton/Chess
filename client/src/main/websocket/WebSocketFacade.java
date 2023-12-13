@@ -2,8 +2,11 @@ package websocket;
 
 import chess.ChessGame;
 import chess.ChessMove;
+import chess.gameImple;
 import com.google.gson.Gson;
 import exception.ResponseException;
+import model.GameModel;
+import serverMessages.loadGame;
 import webSocketMessages.serverMessages.ServerMessage;
 import webSocketMessages.userCommands.UserGameCommand;
 
@@ -32,9 +35,14 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
+                    ChessGame gameNotification = gameImple.serialization().fromJson(message, ChessGame.class);
                     ServerMessage notification = new Gson().fromJson(message, ServerMessage.class);
-                    notificationHandler.notify(notification);
-                    System.out.print("Message recieved");
+                    if (notification.getServerMessageType() == ServerMessage.ServerMessageType.ERROR) {
+                        Error error = new Gson().fromJson(message, Error.class);
+                        notificationHandler.notify(notification, null, error);
+                    }
+                    notificationHandler.notify(notification, gameNotification, null);
+                    //System.out.print(notification.getServerMessageType());
                 }
             });
         } catch (DeploymentException | IOException | URISyntaxException ex) {
@@ -45,6 +53,16 @@ public class WebSocketFacade extends Endpoint {
     //Endpoint requires this method, but you don't have to do anything
     @Override
     public void onOpen(Session session, EndpointConfig endpointConfig) {
+    }
+
+
+    public void leave(Integer gameID, String authToken, ChessGame.TeamColor color) throws ResponseException {
+        try {
+            var action = new UserGameCommand(authToken, gameID, color, null, UserGameCommand.CommandType.LEAVE);
+            this.session.getBasicRemote().sendText(new Gson().toJson(action));
+        } catch (IOException ex) {
+            throw new ResponseException(500, ex.getMessage());
+        }
     }
 
     public void joinGame(Integer gameID, String authToken, ChessGame.TeamColor color) throws ResponseException {

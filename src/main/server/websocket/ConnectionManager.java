@@ -27,8 +27,10 @@ public class ConnectionManager {
 
     }
 
-    public void remove(String visitorName) {
-        connections.remove(visitorName);
+    public void remove(String authToken) {
+        for (List<Connection> connections : connections.values()) {
+            connections.removeIf(connection -> connection.getAuth().equals(authToken));
+        }
     }
 
     public ConcurrentHashMap<Integer, List<Connection>> getConnections() {

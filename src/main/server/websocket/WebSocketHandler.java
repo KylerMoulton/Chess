@@ -34,6 +34,7 @@ public class WebSocketHandler {
             case JOIN_OBSERVER -> observeGame(action.getGameID(), action.getAuthString(), session);
             case MAKE_MOVE -> makeMove(action.getGameID(), action.getAuthString(), action.getMove(), session);
             case RESIGN -> resign(action.getGameID(), action.getAuthString(), session);
+            case LEAVE -> leave(action.getGameID(), action.getAuthString(), session);
         }
     }
 
@@ -180,13 +181,44 @@ public class WebSocketHandler {
             }
         }
         assert curGame != null;
-        curGame.getGame().setIsGameOver();
-        game.updateGameInfo(curGame);
-        String username = auth.getToken(authToken).getUsername();
-        List<Connection> users = connections.connections.get(gameID);
-        for (Connection user : users) {
-            var resignNotification = new notificationMessage("Player " + username + " has resigned");
-            user.session.getRemote().sendString(new Gson().toJson(resignNotification));
+        if (curGame.getGame().isGameOver()) {
+            var errorNotification = new errorMessage("Error: Game is already over");
+            session.getRemote().sendString(new Gson().toJson(errorNotification));
+            return;
         }
+        if (!Objects.equals(auth.getToken(authToken).getUsername(), curGame.getWhiteUsername()) && !Objects.equals(auth.getToken(authToken).getUsername(), curGame.getBlackUsername())) {
+            var errorNotification = new errorMessage("Error: You cannot resign");
+            session.getRemote().sendString(new Gson().toJson(errorNotification));
+        } else {
+            curGame.getGame().setIsGameOver();
+            game.updateGameInfo(curGame);
+            String username = auth.getToken(authToken).getUsername();
+            List<Connection> users = connections.connections.get(gameID);
+            for (Connection user : users) {
+                var resignNotification = new notificationMessage("Player " + username + " has resigned");
+                user.session.getRemote().sendString(new Gson().toJson(resignNotification));
+            }
+        }
+    }
+
+    private void leave(Integer gameID, String authString, Session session) throws DataAccessException, SQLException, IOException {
+        GameDAO game = new GameDAO();
+        AuthDAO auth = new AuthDAO();
+        GameModel curGame = null;
+        for (GameModel games : game.getAllGames()) {
+            if (games.getGameID() == gameID) {
+                curGame = games;
+            }
+        }
+        assert curGame != null;
+        connections.remove(authString);
+        List<Connection> users = connections.connections.get(gameID);
+        var leaveGameNotification = new notificationMessage("Player " + auth.getToken(authString).getUsername() + " left the game");
+        for (Connection user : users) {
+            if (!user.getAuth().equals(authString)) {
+                user.session.getRemote().sendString(new Gson().toJson(leaveGameNotification));
+            }
+        }
+
     }
 }
