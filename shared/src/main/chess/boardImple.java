@@ -22,12 +22,12 @@ public class boardImple implements ChessBoard {
 
     @Override
     public void addPiece(ChessPosition position, ChessPiece piece) {
-        boardArray[position.getRow()][position.getColumn()] = piece;
+        boardArray[position.getRow() - 1][position.getColumn() - 1] = piece;
     }
 
     @Override
     public ChessPiece getPiece(ChessPosition position) {
-        return boardArray[position.getRow()][position.getColumn()];
+        return boardArray[position.getRow() - 1][position.getColumn() - 1];
     }
 
     @Override

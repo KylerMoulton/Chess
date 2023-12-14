@@ -40,7 +40,6 @@ public class moveImple implements ChessMove {
     public int hashCode() {
         return Objects.hash(startPosition, endPosition, promotionPiece);
     }
-
 //    @Override
 //    public String toString() {
 //        return "moveImple{" +

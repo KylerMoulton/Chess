@@ -71,17 +71,22 @@ public class gameImple implements ChessGame {
 
     @Override
     public void makeMove(ChessMove move) throws InvalidMoveException {
-        if (validMoves(move.getStartPosition()).contains(move)) {
-            if (getTeamTurn() == gameBoard.getPiece(move.getStartPosition()).getTeamColor()) {
-                gameBoard.addPiece(move.getEndPosition(), gameBoard.getPiece(move.getStartPosition()));
-                gameBoard.addPiece(move.getStartPosition(), null);
-                if (move.getPromotionPiece() != null) {
-                    ChessPiece newPiece = piecePromotion(move.getPromotionPiece());
-                    gameBoard.addPiece(move.getEndPosition(), newPiece);
-                }
-                setTeamTurn(this.teamTurn == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE);
-            } else throw new InvalidMoveException("Invalid Move");
-        } else throw new InvalidMoveException("Invalid Move");
+        Collection<ChessMove> validMoves = validMoves(move.getStartPosition());
+        for (ChessMove chessMove : validMoves) {
+            if (chessMove.getEndPosition().equals(move.getEndPosition())) {
+                if (getTeamTurn() == gameBoard.getPiece(move.getStartPosition()).getTeamColor()) {
+                    gameBoard.addPiece(move.getEndPosition(), gameBoard.getPiece(move.getStartPosition()));
+                    gameBoard.addPiece(move.getStartPosition(), null);
+                    if (move.getPromotionPiece() != null) {
+                        ChessPiece newPiece = piecePromotion(move.getPromotionPiece());
+                        gameBoard.addPiece(move.getEndPosition(), newPiece);
+                    }
+                    setTeamTurn(this.teamTurn == TeamColor.WHITE ? TeamColor.BLACK : TeamColor.WHITE);
+                    return;
+                } //else throw new InvalidMoveException("Invalid Move");
+            } //else throw new InvalidMoveException("Invalid Move");
+        }
+        throw new InvalidMoveException("Invalid Move");
 
 //        gameBoard.addPiece(move.getEndPosition(), gameBoard.getPiece(move.getStartPosition()));
 //        gameBoard.addPiece(move.getStartPosition(), null);
@@ -99,8 +104,8 @@ public class gameImple implements ChessGame {
 
     @Override
     public boolean isInCheck(TeamColor teamColor) {
-        for (int i = 0; i < 8; i++) {
-            for (int j = 0; j < 8; j++) {
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
                 ChessPosition curPos = new positionImple(i, j);
                 ChessPiece curPiece = getBoard().getPiece(curPos);
                 if (curPiece != null) {
@@ -124,29 +129,8 @@ public class gameImple implements ChessGame {
     @Override
     public boolean isInCheckmate(TeamColor teamColor) {
         if (isInCheck(teamColor)) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
-                    ChessPosition curPos = new positionImple(i, j);
-                    ChessPiece curPiece = getBoard().getPiece(curPos);
-                    if (curPiece != null) {
-                        if (curPiece.getTeamColor() == teamColor) {
-                            if (validMoves(curPos).isEmpty()) {
-                                gameOver = true;
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isInStalemate(TeamColor teamColor) {
-        if (!isInCheck(teamColor)) {
-            for (int i = 0; i < 8; i++) {
-                for (int j = 0; j < 8; j++) {
+            for (int i = 1; i <= 8; i++) {
+                for (int j = 1; j <= 8; j++) {
                     ChessPosition curPos = new positionImple(i, j);
                     ChessPiece curPiece = getBoard().getPiece(curPos);
                     if (curPiece != null) {
@@ -161,8 +145,29 @@ public class gameImple implements ChessGame {
             gameOver = true;
             return true;
         }
-        gameOver = true;
-        return true;
+        return false;
+    }
+
+    @Override
+    public boolean isInStalemate(TeamColor teamColor) {
+        if (!isInCheck(teamColor)) {
+            for (int i = 1; i < 8; i++) {
+                for (int j = 1; j < 8; j++) {
+                    ChessPosition curPos = new positionImple(i, j);
+                    ChessPiece curPiece = getBoard().getPiece(curPos);
+                    if (curPiece != null) {
+                        if (curPiece.getTeamColor() == teamColor) {
+                            if (!validMoves(curPos).isEmpty()) {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            gameOver = true;
+            return true;
+        }
+        return false;
     }
 
     @Override

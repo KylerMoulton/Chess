@@ -2,13 +2,15 @@ package chess;
 
 import java.util.Objects;
 
-public class positionImple implements ChessPosition{
+public class positionImple implements ChessPosition {
     private int row;
     private int column;
+
     public positionImple(int rowPos, int columnPos) {
         this.row = rowPos;
         this.column = columnPos;
     }
+
     @Override
     public int getRow() {
         return row;
@@ -29,7 +31,7 @@ public class positionImple implements ChessPosition{
 
     @Override
     public int hashCode() {
-        return Objects.hash(row, column);
+        return Objects.hash(row, column) * 71;
     }
 
 //    @Override
