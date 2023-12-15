@@ -106,9 +106,9 @@ public class WebSocketHandler {
         if (curGame == null) {
             var errorNotification = new errorMessage("Error: Game doesn't exist");
             session.getRemote().sendString(new Gson().toJson(errorNotification));
+            return;
         }
 
-        assert curGame != null;
 
         var loadGameNotification = new loadGame(curGame.getGame());
         session.getRemote().sendString(new Gson().toJson(loadGameNotification));

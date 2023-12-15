@@ -35,15 +35,20 @@ public class WebSocketFacade extends Endpoint {
             this.session.addMessageHandler(new MessageHandler.Whole<String>() {
                 @Override
                 public void onMessage(String message) {
-                    ChessGame gameNotification = gameImple.serialization().fromJson(message, ChessGame.class);
-                    ServerMessage notification = new Gson().fromJson(message, ServerMessage.class);
-                    if (notification.getServerMessageType() == ServerMessage.ServerMessageType.ERROR) {
-                        Error error = new Gson().fromJson(message, Error.class);
-                        notificationHandler.notify(notification, null, error);
-                    }
-                    notificationHandler.notify(notification, gameNotification, null);
+                    NotificationHandler.notify(message);
                     //System.out.print(notification.getServerMessageType());
                 }
+//                @Override
+//                public void onMessage(String message) {
+//                    ChessGame gameNotification = gameImple.serialization().fromJson(message, ChessGame.class);
+//                    ServerMessage notification = new Gson().fromJson(message, ServerMessage.class);
+//                    if (notification.getServerMessageType() == ServerMessage.ServerMessageType.ERROR) {
+//                        Error error = new Gson().fromJson(message, Error.class);
+//                        notificationHandler.notify(notification, null, error);
+//                    }
+//                    notificationHandler.notify(notification, gameNotification, null);
+//                    //System.out.print(notification.getServerMessageType());
+//                }
             });
         } catch (DeploymentException | IOException | URISyntaxException ex) {
             throw new ResponseException(500, ex.getMessage());

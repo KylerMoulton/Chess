@@ -29,7 +29,7 @@ public class CreateGameService {
         checkAuthorization(token, tokens);
         validGameName(g.getGameName());
         GameModel newgame = new GameModel(games.getGameID(), null, null, g.getGameName(), new gameImple());
-        newgame.getGame().getBoard().resetBoard();
+        //newgame.getGame().getBoard().resetBoard();
         games.insertGame(newgame);
         games.IncreaseGameID();
         return new CreateGameResult(newgame.getGameID(), null);

@@ -42,11 +42,11 @@ public class Client {
 
     public static void main(String[] args) throws Exception {
 //        drawBoard(board);
-        System.out.printf("Welcome to Almost Chess. It's almost like chess, but its not.%n\u001b[5mPlease type Start%n\u001b[0m>>> ");
+        System.out.printf("Welcome to Almost Chess. It's almost like chess, but its not.%n\u001b[5mPlease type Start%n\u001b[0m");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
         while (!Objects.equals(line, "Start")) {
-            System.out.printf("Invalid Command: To start please type Start%n>>> ");
+            System.out.printf("Invalid Command: To start please type Start%n");
             line = scanner.nextLine();
         }
         preLoginUI();
@@ -96,7 +96,9 @@ public class Client {
     }
 
     private static void observe() throws IOException, ResponseException {
-        System.out.printf(" Please enter the Game ID of the game you wish to observe%n>>> ");
+        ListGamesResult listGamesResult = server.listGames(auth);
+        games = listGamesResult.getGamesList();
+        System.out.printf(" Please enter the Game ID of the game you wish to observe%n");
         Scanner joinGameScanner = new Scanner(System.in);
         String GameID = joinGameScanner.nextLine();
         JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, null, Integer.parseInt(GameID)));
@@ -115,10 +117,10 @@ public class Client {
     private static void join() throws IOException, ResponseException {
         ListGamesResult listGamesResult = server.listGames(auth);
         games = listGamesResult.getGamesList();
-        System.out.printf(" Please enter the Game ID of the game you wish to join%n>>> ");
+        System.out.printf(" Please enter the Game ID of the game you wish to join%n ");
         Scanner joinGameScanner = new Scanner(System.in);
         String GameID = joinGameScanner.nextLine();
-        System.out.printf(" Please enter the Team Color you wish to join: WHITE/BLACK%n>>> ");
+        System.out.printf(" Please enter the Team Color you wish to join: WHITE/BLACK%n ");
         Scanner joinGameColorScanner = new Scanner(System.in);
         String Color = joinGameColorScanner.nextLine();
         playerColor = Color;
@@ -174,7 +176,7 @@ public class Client {
     }
 
     private static void leave(GameModel game, String Color) throws ResponseException, IOException {
-        System.out.printf("Are you sure you would like to leave the game? (Y/N)%n>>>");
+        System.out.printf("Are you sure you would like to leave the game? (Y/N)%n");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
         if (Objects.equals(line, "N")) {
@@ -187,7 +189,7 @@ public class Client {
     }
 
     private static void resign(GameModel game, String Color) throws ResponseException, IOException {
-        System.out.printf("Are you sure you would like to resign? (Y/N)%n>>>");
+        System.out.printf("Are you sure you would like to resign? (Y/N)%n");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
         if (Objects.equals(line, "N")) {
@@ -200,13 +202,13 @@ public class Client {
     }
 
     private static void makeMove(GameModel game, String Color) throws ResponseException, IOException {
-        System.out.printf("Where is the piece you want to move: ex(1a)%n>>>");
+        System.out.printf("Where is the piece you want to move: ex(1a)%n");
         Scanner scanner = new Scanner(System.in);
         String line = scanner.nextLine();
         int row = line.charAt(0) - 48;
         int col = line.charAt(1) - 'a' + 1;
         ChessPosition startPosition = new positionImple(row, col);
-        System.out.printf("Where do you want to move: ex(1a)%n>>>");
+        System.out.printf("Where do you want to move: ex(1a)%n");
         Scanner scanner2 = new Scanner(System.in);
         String line2 = scanner2.nextLine();
         int row2 = line2.charAt(0) - 48;
@@ -229,7 +231,6 @@ public class Client {
         System.out.print("  Leave\n");
         System.out.print("  help - View possible commands\n\n");
         System.out.print("\u001b[0m");
-        System.out.print(" >>> ");
     }
 
     public static void joinHelpObserver() {
@@ -238,7 +239,6 @@ public class Client {
         System.out.print("  Leave\n");
         System.out.print("  help - View possible commands\n\n");
         System.out.print("\u001b[0m");
-        System.out.print(" >>> ");
     }
 
     private static void list() throws IOException, ResponseException {
@@ -254,7 +254,7 @@ public class Client {
     }
 
     private static void create() throws IOException, ResponseException {
-        System.out.printf(" Thanks for choosing to create a game: Please enter the name of your game%n>>> ");
+        System.out.printf(" Thanks for choosing to create a game: Please enter the name of your game%n ");
         Scanner createGameScanner = new Scanner(System.in);
         String gameName = createGameScanner.nextLine();
         CreateGameResult createGameResult = server.createGame(new CreateGameRequest(gameName, auth));
@@ -268,17 +268,16 @@ public class Client {
         System.out.print("  quit - Quit the application\n");
         System.out.print("  help - View possible commands\n\n");
         System.out.print("\u001b[0m");
-        System.out.print(" >>> ");
     }
 
     public static void register() throws IOException, ResponseException {
-        System.out.printf(" Thanks for choosing to register: Please choose your username%n>>> ");
+        System.out.printf(" Thanks for choosing to register: Please choose your username%n ");
         Scanner usernameScanner = new Scanner(System.in);
         String username = usernameScanner.nextLine();
-        System.out.printf(" Please choose your password%n>>> ");
+        System.out.printf(" Please choose your password%n");
         Scanner passwordScanner = new Scanner(System.in);
         String password = passwordScanner.nextLine();
-        System.out.printf(" Please enter your email%n>>> ");
+        System.out.printf(" Please enter your email%n");
         Scanner emailScanner = new Scanner(System.in);
         String email = emailScanner.nextLine();
         RegisterResult registerResult = server.registerUser(new RegisterRequest(username, password, email));
@@ -295,10 +294,10 @@ public class Client {
     }
 
     public static void login() throws IOException, ResponseException {
-        System.out.printf(" To login please enter your username%n>>> ");
+        System.out.printf(" To login please enter your username%n");
         Scanner usernameScanner = new Scanner(System.in);
         String username = usernameScanner.nextLine();
-        System.out.printf(" Please enter your password%n>>> ");
+        System.out.printf(" Please enter your password%n");
         Scanner passwordScanner = new Scanner(System.in);
         String password = passwordScanner.nextLine();
         LoginResult loginResult = server.loginUser(new LoginRequest(username, password));
@@ -327,6 +326,5 @@ public class Client {
         System.out.print("  quit - Quit the application\n");
         System.out.print("  help - View possible commands\n\n");
         System.out.print("\u001b[0m");
-        System.out.print(" >>> ");
     }
 }

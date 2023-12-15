@@ -23,15 +23,15 @@ public class DrawChessBoard {
     public static void drawBoard(ChessBoard game, ChessGame.TeamColor team) {
         var out = new PrintStream(System.out, true, StandardCharsets.UTF_8);
         if (team == ChessGame.TeamColor.WHITE || team == null) {
-            drawHeaders2(out);
+            drawHeaders(out);
             drawSquares(out, game);
-            drawHeaders2(out);
+            drawHeaders(out);
         } else {
             //out.print("\u001b[39:49;0m");
             out.println();
-            drawHeaders(out);
+            drawHeaders2(out);
             drawSquares2(out, game);
-            drawHeaders(out);
+            drawHeaders2(out);
         }
     }
 
@@ -40,14 +40,14 @@ public class DrawChessBoard {
         out.print(SET_BG_COLOR_DARK_GREY);
         out.print(SET_TEXT_COLOR_WHITE);
         out.print(SET_TEXT_BOLD);
-        for (int row = 1; row <= 8; row++) {
+        for (int row = 8; row >= 1; row--) {
             out.print(ERASE_SCREEN);
             out.print(SET_BG_COLOR_DARK_GREY);
             out.print(SET_TEXT_COLOR_WHITE);
             out.print(SET_TEXT_BOLD);
             out.print(" " + row + " ");
-            for (int col = 0; col <= 7; col++) {
-                ChessPiece curPiece = game.getPiece(new positionImple(row - 1, col));
+            for (int col = 1; col <= 8; col++) {
+                ChessPiece curPiece = game.getPiece(new positionImple(row, col));
                 String s = switchPiece(curPiece);
                 if (curPiece != null) {
                     if (whiteSquare) {
@@ -106,14 +106,14 @@ public class DrawChessBoard {
         out.print(SET_BG_COLOR_DARK_GREY);
         out.print(SET_TEXT_COLOR_WHITE);
         out.print(SET_TEXT_BOLD);
-        for (int row = 8; row >= 1; row--) {
+        for (int row = 1; row <= 8; row++) {
             out.print(ERASE_SCREEN);
             out.print(SET_BG_COLOR_DARK_GREY);
             out.print(SET_TEXT_COLOR_WHITE);
             out.print(SET_TEXT_BOLD);
             out.print(" " + row + " ");
-            for (int col = 7; col >= 0; col--) {
-                ChessPiece curPiece = game.getPiece(new positionImple(row - 1, col));
+            for (int col = 8; col >= 1; col--) {
+                ChessPiece curPiece = game.getPiece(new positionImple(row, col));
                 String s = switchPiece(curPiece);
                 if (curPiece != null) {
                     if (whiteSquare) {

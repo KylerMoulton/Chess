@@ -16,6 +16,7 @@ public class gameImple implements ChessGame {
     public gameImple() {
         setBoard(new boardImple());
         setTeamTurn(TeamColor.WHITE);
+        gameBoard.resetBoard();
         gameOver = false;
     }
 
