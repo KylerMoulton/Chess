@@ -4,15 +4,11 @@ import chess.ChessBoard;
 import chess.ChessGame;
 import chess.ChessPiece;
 import chess.positionImple;
-import model.GameModel;
 
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
-import java.util.Collection;
-import java.util.Random;
 
 import static ui.EscapeSequences.*;
-import static ui.EscapeSequences.SET_TEXT_COLOR_WHITE;
 
 public class DrawChessBoard {
     private static boolean whiteSquare = true;
@@ -47,42 +43,7 @@ public class DrawChessBoard {
             out.print(SET_TEXT_BOLD);
             out.print(" " + row + " ");
             for (int col = 1; col <= 8; col++) {
-                ChessPiece curPiece = game.getPiece(new positionImple(row, col));
-                String s = switchPiece(curPiece);
-                if (curPiece != null) {
-                    if (whiteSquare) {
-                        out.print(SET_BG_COLOR_WHITE);
-                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            out.print(SET_TEXT_COLOR_BLUE);
-                        } else {
-                            out.print(SET_TEXT_COLOR_RED);
-                        }
-                        out.print(" " + s + " ");
-                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)).getPieceType() + " ");
-                        whiteSquare = false;
-                    } else {
-                        out.print(SET_BG_COLOR_BLACK);
-                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            out.print(SET_TEXT_COLOR_BLUE);
-                        } else {
-                            out.print(SET_TEXT_COLOR_RED);
-                        }
-                        out.print(" " + s + " ");
-                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)) + " ");
-                        whiteSquare = true;
-                    }
-                } else {
-                    if (whiteSquare) {
-                        out.print(SET_BG_COLOR_WHITE);
-                        out.print("   ");
-                        whiteSquare = false;
-                    } else {
-                        out.print(SET_BG_COLOR_BLACK);
-                        out.print("   ");
-                        whiteSquare = true;
-                    }
-
-                }
+                drawPieces(out, game, row, col);
 
             }
             out.print(ERASE_SCREEN);
@@ -113,42 +74,7 @@ public class DrawChessBoard {
             out.print(SET_TEXT_BOLD);
             out.print(" " + row + " ");
             for (int col = 8; col >= 1; col--) {
-                ChessPiece curPiece = game.getPiece(new positionImple(row, col));
-                String s = switchPiece(curPiece);
-                if (curPiece != null) {
-                    if (whiteSquare) {
-                        out.print(SET_BG_COLOR_WHITE);
-                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            out.print(SET_TEXT_COLOR_BLUE);
-                        } else {
-                            out.print(SET_TEXT_COLOR_RED);
-                        }
-                        out.print(" " + s + " ");
-                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)).getPieceType() + " ");
-                        whiteSquare = false;
-                    } else {
-                        out.print(SET_BG_COLOR_BLACK);
-                        if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
-                            out.print(SET_TEXT_COLOR_BLUE);
-                        } else {
-                            out.print(SET_TEXT_COLOR_RED);
-                        }
-                        out.print(" " + s + " ");
-                        //out.print(" " + game.getPiece(new positionImple(row - 1, col)) + " ");
-                        whiteSquare = true;
-                    }
-                } else {
-                    if (whiteSquare) {
-                        out.print(SET_BG_COLOR_WHITE);
-                        out.print("   ");
-                        whiteSquare = false;
-                    } else {
-                        out.print(SET_BG_COLOR_BLACK);
-                        out.print("   ");
-                        whiteSquare = true;
-                    }
-
-                }
+                drawPieces(out, game, row, col);
 
             }
             out.print(ERASE_SCREEN);
@@ -165,6 +91,45 @@ public class DrawChessBoard {
         out.print(RESET_BG_COLOR);
         out.print("\u001b[49m");
 //        out.println();
+    }
+
+    private static void drawPieces(PrintStream out, ChessBoard game, int row, int col) {
+        ChessPiece curPiece = game.getPiece(new positionImple(row, col));
+        String s = switchPiece(curPiece);
+        if (curPiece != null) {
+            if (whiteSquare) {
+                out.print(SET_BG_COLOR_WHITE);
+                if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    out.print(SET_TEXT_COLOR_BLUE);
+                } else {
+                    out.print(SET_TEXT_COLOR_RED);
+                }
+                out.print(" " + s + " ");
+                //out.print(" " + game.getPiece(new positionImple(row - 1, col)).getPieceType() + " ");
+                whiteSquare = false;
+            } else {
+                out.print(SET_BG_COLOR_BLACK);
+                if (curPiece.getTeamColor() == ChessGame.TeamColor.WHITE) {
+                    out.print(SET_TEXT_COLOR_BLUE);
+                } else {
+                    out.print(SET_TEXT_COLOR_RED);
+                }
+                out.print(" " + s + " ");
+                //out.print(" " + game.getPiece(new positionImple(row - 1, col)) + " ");
+                whiteSquare = true;
+            }
+        } else {
+            if (whiteSquare) {
+                out.print(SET_BG_COLOR_WHITE);
+                out.print("   ");
+                whiteSquare = false;
+            } else {
+                out.print(SET_BG_COLOR_BLACK);
+                out.print("   ");
+                whiteSquare = true;
+            }
+
+        }
     }
 
     private static String switchPiece(ChessPiece piece) {
@@ -190,9 +155,6 @@ public class DrawChessBoard {
         String[] headers = {"a", "b", "c", "d", "e", "f", "g", "h"};
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
             drawHeader(out, headers[boardCol]);
-//            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
-//                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
-//            }
         }
         out.print("   ");
         out.print(RESET_BG_COLOR);
@@ -209,9 +171,6 @@ public class DrawChessBoard {
         String[] headers = {"h", "g", "f", "e", "d", "c", "b", "a"};
         for (int boardCol = 0; boardCol < BOARD_SIZE_IN_SQUARES; ++boardCol) {
             drawHeader(out, headers[boardCol]);
-//            if (boardCol < BOARD_SIZE_IN_SQUARES - 1) {
-//                out.print(EMPTY.repeat(LINE_WIDTH_IN_CHARS));
-//            }
         }
         out.print("   ");
         out.print(RESET_BG_COLOR);
