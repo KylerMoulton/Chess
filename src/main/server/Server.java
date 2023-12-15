@@ -7,7 +7,6 @@ import spark.Spark;
 
 @WebSocket
 public class Server {
-    private final WebSocketHandler webSocketHandler = new WebSocketHandler();
 
     public static void main(String[] args) {
         new Server().run();
@@ -44,6 +43,6 @@ public class Server {
                 (new JoinGameHandler()).handleRequest(req,
                         res));
         Spark.get("/echo/:msg", (req, res) -> "HTTP response: " + req.params("msg"));
-        
+
     }
 }

@@ -1,44 +1,30 @@
+import chess.*;
+import exception.ResponseException;
+import model.GameModel;
+import printBoard.DrawChessBoard;
+import request.CreateGameRequest;
+import request.JoinGameRequest;
+import request.LoginRequest;
+import request.RegisterRequest;
+import result.*;
+import web.ServerFacade;
+import websocket.NotificationHandler;
+import websocket.WebSocketFacade;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.Scanner;
 
-import chess.*;
-import exception.ResponseException;
-import model.GameModel;
-import printBoard.DrawChessBoard;
-import request.*;
-import result.*;
-import web.ServerFacade;
-import websocket.WebSocketFacade;
-import websocket.NotificationHandler;
-
-
-import java.util.Random;
-
 public class Client {
     public static ServerFacade server = new ServerFacade();
-    private final String serverUrl;
-    private static NotificationHandler notificationHandler;
     private static WebSocketFacade webSocketFacade;
     private static String auth;
 
-    private static boolean whiteSquare = true;
-
     private static Collection<GameModel> games;
 
-    private static final int BOARD_SIZE_IN_SQUARES = 8;
-    private static final int SQUARE_SIZE_IN_CHARS = 8;
-    private static final int LINE_WIDTH_IN_CHARS = 1;
-    private static final String EMPTY = " ";
-    private static Random rand = new Random();
-    private static ChessBoard board = new boardImple();
     private static String playerColor;
 
-    public Client(String serverUrl, NotificationHandler notificationHandler) {
-        this.serverUrl = serverUrl;
-        this.notificationHandler = notificationHandler;
-    }
 
     public static void main(String[] args) throws Exception {
 //        drawBoard(board);
@@ -91,7 +77,7 @@ public class Client {
 
     private static void logout() throws IOException, ResponseException {
         System.out.print("  Thanks for playing Almost Chess\n");
-        LogoutResult logoutResult = server.logoutUser(auth);
+        server.logoutUser(auth);
         preLoginUI();
     }
 
@@ -101,7 +87,7 @@ public class Client {
         System.out.printf(" Please enter the Game ID of the game you wish to observe%n");
         Scanner joinGameScanner = new Scanner(System.in);
         String GameID = joinGameScanner.nextLine();
-        JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, null, Integer.parseInt(GameID)));
+        server.joinGame(new JoinGameRequest(auth, null, Integer.parseInt(GameID)));
         playerColor = null;
         for (GameModel game : games) {
             if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
@@ -124,7 +110,7 @@ public class Client {
         Scanner joinGameColorScanner = new Scanner(System.in);
         String Color = joinGameColorScanner.nextLine();
         playerColor = Color;
-        JoinGameResult joinGameResult = server.joinGame(new JoinGameRequest(auth, Color, Integer.parseInt(GameID)));
+        server.joinGame(new JoinGameRequest(auth, Color, Integer.parseInt(GameID)));
         for (GameModel game : games) {
             if (Objects.equals(game.getGameID(), Integer.parseInt(GameID))) {
                 webSocketFacade = new WebSocketFacade("http://localhost:8080", new NotificationHandler(playerColor));
@@ -246,7 +232,7 @@ public class Client {
         ListGamesResult listGamesResult = server.listGames(auth);
         games = listGamesResult.getGamesList();
         for (GameModel game : listGamesResult.getGamesList()) {
-            System.out.printf(Integer.toString(game.getGameID()) + " : " + game.getGameName() + " : White Username-" + game.getWhiteUsername() + " : Black Username-" + game.getBlackUsername() + "\n");
+            System.out.printf(game.getGameID() + " : " + game.getGameName() + " : White Username-" + game.getWhiteUsername() + " : Black Username-" + game.getBlackUsername() + "\n");
         }
         //System.out.print(listGamesResult.getGamesList());
         System.out.print("\nHere is the list of games\n");
@@ -257,7 +243,7 @@ public class Client {
         System.out.printf(" Thanks for choosing to create a game: Please enter the name of your game%n ");
         Scanner createGameScanner = new Scanner(System.in);
         String gameName = createGameScanner.nextLine();
-        CreateGameResult createGameResult = server.createGame(new CreateGameRequest(gameName, auth));
+        server.createGame(new CreateGameRequest(gameName, auth));
         postLoginUI();
     }
 
@@ -307,7 +293,9 @@ public class Client {
             System.out.print("\nUnable to login: Please check your username and password and try again\n");
             preLoginUI();
         }
-        System.out.printf("Logged in as " + loginResult.getUsername() + "\n");
+        if (loginResult != null) {
+            System.out.printf("Logged in as " + loginResult.getUsername() + "\n");
+        }
         postLoginUI();
     }
 

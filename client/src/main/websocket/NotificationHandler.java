@@ -3,11 +3,10 @@ package websocket;
 import chess.ChessGame;
 import chess.gameImple;
 import com.google.gson.Gson;
+import printBoard.DrawChessBoard;
 import serverMessages.errorMessage;
-import serverMessages.loadGame;
 import serverMessages.notificationMessage;
 import webSocketMessages.serverMessages.ServerMessage;
-import printBoard.DrawChessBoard;
 
 public class NotificationHandler {
     public NotificationHandler(String color) {
@@ -39,8 +38,6 @@ public class NotificationHandler {
                     }
                 }
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         } catch (Throwable t) {
             System.out.println(t.getMessage());
         }
